@@ -1,0 +1,73 @@
+<resources>
+    <string name="app_name">Taiba Guide</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+    <string name="contact_form">Contact Us</string>
+    <string name="contact_form_name">Your Name</string>
+    <string name="contact_form_email">Your Email</string>
+    <string name="contact_form_subject">Subject</string>
+    <string name="contact_form_message">Message</string>
+    <string name="contact_form_button">Send Message</string>
+    <string name="contact_form_post_message">Please wait! We\'re sending your message to the support department...</string>
+    <string name="contact_posted">Your message has been successfully delivered.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- UI strings -->
+    <string name="category_name_tour">Points of Interest</string>
+    <string name="category_name_food">Restaurants</string>
+    <string name="category_name_hotel">Hotels</string>
+    <string name="item_hightlight_txt">Hightlight</string>
+    <string name="intent_extra_item_title">ITEM_TITLE</string>
+
+    <!-- Item data strings -->
+
+    <!-- POIs -->
+
+    <!-- Islamic Landmarks -->
+    <string name="poi_islamic_landmarks_1_title">Prophets Mosque</string>
+    <string name="poi_islamic_landmarks_1_location">ALharam</string>
+    <string name="poi_islamic_landmarks_1_review">5</string>
+    <string-array name="poi_islamic_landmarks_1_highlights">
+        <item>Prophets mosque</item>
+
+    </string-array>
+
+
+    <!-- Historical Places -->
+    <string name="poi_historical_places_1_title">Uhud Mountain</string>
+    <string name="poi_historical_places_1_location">Medinah</string>
+    <string name="poi_historical_places_1_review">5</string>
+    <string-array name="poi_historical_places_1_highlights">
+        <item>Historical area</item>
+
+    </string-array>
+
+
+
+    <!-- Restaurants -->
+    <string name="poi_restaurants_1_title">Taiba Restaurant</string>
+    <string name="poi_restaurants_1_location">Medinah</string>
+    <string name="poi_restaurants_1_review">5</string>
+    <string-array name="poi_restaurants_1_highlights">
+        <item>Saudi Food</item>
+        <item>Vegetarian Friendly</item>
+    </string-array>
+
+
+
+    <!-- Hotel -->
+    <string name="poi_hotels_1_title">Taiba Hotel</string>
+    <string name="poi_hotels_1_location">Alharam</string>
+    <string name="poi_hotels_1_review">5</string>
+    <string-array name="poi_hotels_1_highlights">
+        <item>Free Wifi</item>
+        <item>Breakfast Available</item>
+        <item>Air Conditioning</item>
+        <item>Pool</item>
+        <item>Non-Smoking Hotel</item>
+    </string-array>
+
+</resources>
