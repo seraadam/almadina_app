@@ -13,21 +13,30 @@ import android.widget.ListView;
 
 import com.example.project1.R;
 import com.example.project1.adapters.ExploreAdapter;
+import com.example.project1.models.PlaceCategory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Explore extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
     ListView mListView;
-    String[] OPTION_NAMES = {"Islamic Landmarks", "Historical Places","Museum", "Event","shopping mall", "Restaurants"};
-    String[] OPTION_DESCRIPTION = {"Visit and know more about Islamic places in Almadinah!", "Discover more historical places!", "Find out where to eat!"};
-    Integer[] OPTIONS_PICTURES = {R.drawable.pois, R.drawable.tripplanner, R.drawable.multimedia};
+    private List<PlaceCategory> categories;
+
+
+    String[] OPTION_NAMES = new String[]{"Islamic Landmarks", "Historical Places","Museum", "Event","shopping mall", "Restaurants"};
+    String[] OPTION_DESCRIPTION =new String[] {"Visit and know more about Islamic places in Almadinah!", "Discover more historical places!", "Find out where to eat!"};
+    int[] OPTIONS_PICTURES = new int[]{R.drawable.pois, R.drawable.tripplanner, R.drawable.multimedia};
+
 
     private String mParam1;
     private String mParam2;
 
     private Home.OnFragmentInteractionListener mListener;
 
-    public Explore() {}
+
 
     public static Home newInstance(String param1, String param2) {
         Home fragment = new Home();
@@ -45,23 +54,38 @@ public class Explore extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_explore, container, false);
+
+
+        View view = inflater.inflate(R.layout.fragment_explore, container, false);
+        categories = new ArrayList<>();
+        mListView = view.findViewById(R.id.listview);
+
+        filllist();
+        ExploreAdapter exploreAdapter = new ExploreAdapter(getActivity(), categories);
+        mListView.setAdapter(exploreAdapter);
+
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mListView = view.findViewById(R.id.listview);
-        ExploreAdapter exploreAdapter = new ExploreAdapter(getActivity(), OPTION_NAMES, OPTION_DESCRIPTION, OPTIONS_PICTURES);
-        mListView.setAdapter(exploreAdapter);
     }
 
+    public  void filllist(){
+        for (int i = 0; i < OPTION_NAMES.length; i++) {
+            PlaceCategory c = new PlaceCategory(OPTION_NAMES[i],OPTION_DESCRIPTION[i],OPTIONS_PICTURES[i]);
+            categories.add(c);
+        }
+    }
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);

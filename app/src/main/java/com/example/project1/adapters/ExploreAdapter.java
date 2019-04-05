@@ -10,69 +10,92 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.project1.R;
 import com.example.project1.activities.ExploreDetailsActivity;
+import com.example.project1.models.PlaceCategory;
 
-public class ExploreAdapter extends ArrayAdapter<String> {
+import java.util.List;
+
+public class ExploreAdapter extends ArrayAdapter<PlaceCategory> {
+
     private static final String EXPLORE_CATEGORY_KEY = "explore_category_key";
     private String[] option_name;
     private String[] option_desc;
     private Integer[] option_pic;
+
+    private List<PlaceCategory> pcategory;
     private Activity mContext;
 
-    public ExploreAdapter(Activity context, String[] option_name, String[] option_desc, Integer[] option_pic) {
-        super(context, R.layout.list_item, option_name);
 
-        this.mContext = context;
-        this.option_name = option_name;
-        this.option_desc = option_desc;
-        this.option_pic = option_pic;
-    }
+    public static class ViewHolder  {
+        public TextView tvw1;
+        public TextView tvw2;
+        public ImageView ivw;
+        public LinearLayout listItemLayout;
 
-    @NonNull
-    @Override
-    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View r = convertView;
-        ViewHolder viewHolder = null;
-        if (r == null) {
-            LayoutInflater layoutInflater = mContext.getLayoutInflater();
-            r = layoutInflater.inflate(R.layout.list_item, null, true);
-            viewHolder = new ViewHolder(r);
-            r.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) r.getTag();
+        public ViewHolder(View v) {
 
-        }
-
-        viewHolder.ivw.setImageResource(option_pic[position]);
-
-        viewHolder.tvw1.setText(option_name[position]);
-        viewHolder.tvw2.setText(option_desc[position]);
-        viewHolder.listItemLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent itemDetailsIntent = new Intent(mContext, ExploreDetailsActivity.class);
-                itemDetailsIntent.putExtra(EXPLORE_CATEGORY_KEY, option_name[position]);
-                mContext.startActivity(itemDetailsIntent);
-            }
-        });
-
-        return r;
-    }
-
-    class ViewHolder {
-        TextView tvw1;
-        TextView tvw2;
-        ImageView ivw;
-        LinearLayout listItemLayout;
-
-        ViewHolder(View v) {
             tvw1 = v.findViewById(R.id.menu_options);
             tvw2 = v.findViewById(R.id.options_desc);
             ivw = v.findViewById(R.id.imageView);
             listItemLayout = v.findViewById(R.id.list_item_layout);
         }
     }
+
+    public ExploreAdapter(Activity context, List<PlaceCategory> pcategory) {
+        super(context, R.layout.list_item, pcategory);
+
+        this.mContext = context;
+        this.pcategory= pcategory;
+    }
+
+
+    @NonNull
+    @Override
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
+
+        ViewHolder viewHolder = new ViewHolder(convertView);
+
+        if (convertView == null) {
+
+            LayoutInflater layoutInflater = mContext.getLayoutInflater();
+            convertView = layoutInflater.inflate(R.layout.list_item, null, true);
+
+            viewHolder = new ViewHolder(convertView);
+
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+
+        }
+
+        final PlaceCategory pcat = pcategory.get(position);
+
+        viewHolder.ivw.setImageResource(pcat.getPic());
+
+        viewHolder.tvw1.setText(pcat.getName());
+        viewHolder.tvw2.setText(pcat.getDesc());
+
+        viewHolder.listItemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent itemDetailsIntent = new Intent(mContext, ExploreDetailsActivity.class);
+                itemDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                itemDetailsIntent.putExtra(EXPLORE_CATEGORY_KEY, pcat.getName());
+                mContext.startActivity(itemDetailsIntent);
+            }
+        });
+
+        return convertView;
+    }
+
+    public int getCount () {
+        return pcategory.size();
+    }
+
+
 }
