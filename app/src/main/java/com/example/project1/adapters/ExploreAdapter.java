@@ -22,9 +22,6 @@ import java.util.List;
 public class ExploreAdapter extends ArrayAdapter<PlaceCategory> {
 
     private static final String EXPLORE_CATEGORY_KEY = "explore_category_key";
-    private String[] option_name;
-    private String[] option_desc;
-    private Integer[] option_pic;
 
     private List<PlaceCategory> pcategory;
     private Activity mContext;
@@ -58,7 +55,8 @@ public class ExploreAdapter extends ArrayAdapter<PlaceCategory> {
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
 
-        ViewHolder viewHolder = new ViewHolder(convertView);
+        assert convertView != null;
+        ViewHolder viewHolder;
 
         if (convertView == null) {
 

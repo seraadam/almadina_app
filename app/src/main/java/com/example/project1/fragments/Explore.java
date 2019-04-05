@@ -26,10 +26,9 @@ public class Explore extends Fragment {
     private List<PlaceCategory> categories;
 
 
-    String[] OPTION_NAMES = new String[]{"Islamic Landmarks", "Historical Places","Museum", "Event","shopping mall", "Restaurants"};
-    String[] OPTION_DESCRIPTION =new String[] {"Visit and know more about Islamic places in Almadinah!", "Discover more historical places!", "Find out where to eat!"};
-    int[] OPTIONS_PICTURES = new int[]{R.drawable.pois, R.drawable.tripplanner, R.drawable.multimedia};
-
+    String[] OPTION_NAMES ;
+    String[] OPTION_DESCRIPTION ;
+    int[] OPTIONS_PICTURES;
 
     private String mParam1;
     private String mParam2;
@@ -54,6 +53,11 @@ public class Explore extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        OPTION_NAMES = new String[]{"Islamic Landmarks", "Historical Places","Museum", "Event","shopping mall", "Restaurants"};
+        OPTION_DESCRIPTION =new String[] {"Visit and know more about Islamic places in Almadinah!", "Discover more historical places!", "Visit and know more about Islamic places in Almadinah!",
+                "Visit and know more about Islamic places in Almadinah!","Visit and know more about Islamic places in Almadinah!","Find out where to eat!"};
+         OPTIONS_PICTURES = new int[]{R.drawable.pois, R.drawable.tripplanner, R.drawable.multimedia,R.drawable.pois, R.drawable.tripplanner, R.drawable.multimedia};
 
 
     }
@@ -81,7 +85,8 @@ public class Explore extends Fragment {
     }
 
     public  void filllist(){
-        for (int i = 0; i < OPTION_NAMES.length; i++) {
+        for (int i = 0; i < 6 ; i++) {
+
             PlaceCategory c = new PlaceCategory(OPTION_NAMES[i],OPTION_DESCRIPTION[i],OPTIONS_PICTURES[i]);
             categories.add(c);
         }
