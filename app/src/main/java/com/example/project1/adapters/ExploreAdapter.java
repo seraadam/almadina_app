@@ -83,7 +83,7 @@ public class ExploreAdapter extends ArrayAdapter<PlaceCategory> {
             public void onClick(View view) {
                 Intent itemDetailsIntent = new Intent(mContext, ExploreDetailsActivity.class);
                 itemDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                itemDetailsIntent.putExtra(EXPLORE_CATEGORY_KEY, pcat.getName());
+                itemDetailsIntent.putExtra(EXPLORE_CATEGORY_KEY, pcat.getValue());
                 mContext.startActivity(itemDetailsIntent);
             }
         });

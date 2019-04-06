@@ -14,65 +14,76 @@ import android.widget.TextView;
 
 import com.example.project1.R;
 import com.example.project1.activities.ItemDetailsActivity;
+import com.example.project1.models.Places;
+import com.example.project1.models.Record;
+import com.squareup.picasso.Picasso;
+import java.util.List;
 
-public class ExploreDetailsAdapter extends ArrayAdapter<String> {
+public class ExploreDetailsAdapter extends ArrayAdapter<Record> {
     private static final String ITEM_DETAILS_KEY = "item_details_key";
-    private String[] option_name;
-    private String[] option_desc;
-    private Integer[] option_pic;
+
     private Activity mContext;
+    private List<Record> gplaces;
 
-    public ExploreDetailsAdapter(Activity context, String[] option_name, String[] option_desc, Integer[] option_pic) {
-        super(context, R.layout.list_item, option_name);
+    public static class ViewHolder {
+        public TextView tvw1;
+        public TextView tvw2;
+        public ImageView ivw;
+        public LinearLayout listItemLayout;
 
-        this.mContext = context;
-        this.option_name = option_name;
-        this.option_desc = option_desc;
-        this.option_pic = option_pic;
-    }
-
-    @NonNull
-    @Override
-    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View r = convertView;
-        ViewHolder viewHolder = null;
-        if (r == null) {
-            LayoutInflater layoutInflater = mContext.getLayoutInflater();
-            r = layoutInflater.inflate(R.layout.list_item, null, true);
-            viewHolder = new ViewHolder(r);
-            r.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) r.getTag();
-
-        }
-
-        viewHolder.ivw.setImageResource(option_pic[position]);
-
-        viewHolder.tvw1.setText(option_name[position]);
-        viewHolder.tvw2.setText(option_desc[position]);
-        viewHolder.listItemLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent itemDetailsIntent = new Intent(mContext, ItemDetailsActivity.class);
-                itemDetailsIntent.putExtra(ITEM_DETAILS_KEY, option_name[position]);
-                mContext.startActivity(itemDetailsIntent);
-            }
-        });
-
-        return r;
-    }
-
-    class ViewHolder {
-        TextView tvw1;
-        TextView tvw2;
-        ImageView ivw;
-        LinearLayout listItemLayout;
-
-        ViewHolder(View v) {
+        public ViewHolder(View v) {
             tvw1 = v.findViewById(R.id.menu_options);
             tvw2 = v.findViewById(R.id.options_desc);
             ivw = v.findViewById(R.id.imageView);
             listItemLayout = v.findViewById(R.id.list_item_layout);
         }
     }
+
+    public ExploreDetailsAdapter(Activity context, List<Record> gplaces) {
+        super(context, R.layout.list_item, gplaces);
+
+        this.mContext = context;
+        this.gplaces =gplaces;
+    }
+
+    @NonNull
+    @Override
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
+        assert convertView != null;
+        ViewHolder viewHolder;
+
+        if (convertView == null) {
+
+            LayoutInflater layoutInflater = mContext.getLayoutInflater();
+            convertView = layoutInflater.inflate(R.layout.list_item, null, true);
+
+            viewHolder = new ViewHolder(convertView);
+
+            convertView.setTag(viewHolder);
+
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+
+        }
+
+        final Record pcat = gplaces.get(position);
+
+        Picasso.with(mContext).load(pcat.getImageName()).into(viewHolder.ivw);
+       // viewHolder.ivw.setImageDrawable(getDrawable("R.drawable."+ pcat.getImage_name()));
+        viewHolder.tvw1.setText(pcat.getTitle());
+        viewHolder.tvw2.setText(pcat.getDescription());
+        viewHolder.listItemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent itemDetailsIntent = new Intent(mContext, ItemDetailsActivity.class);
+                itemDetailsIntent.putExtra(ITEM_DETAILS_KEY, gplaces.get(position).getTitle());
+                mContext.startActivity(itemDetailsIntent);
+            }
+        });
+
+        return convertView;
+    }
+
+
 }

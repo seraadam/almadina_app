@@ -2,6 +2,7 @@ package com.example.project1.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.project1.R;
 import com.example.project1.models.ItemDetails;
+import com.example.project1.models.Places;
 
 import java.util.ArrayList;
 
@@ -25,12 +27,14 @@ public class ItemDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        String itemTitle = getIntent().getStringExtra(ITEM_DETAILS_KEY);
-        setTitle(itemTitle);
-        initItems(mItems);
-        int currentItemIndex = getItemIndexByTitle(itemTitle);
+        Bundle itemTitle = getIntent().getExtras();
+        Log.e("places",itemTitle.toString());
 
-        inflateLayout(currentItemIndex);
+        //setTitle(itemTitle);
+        //initItems(mItems);
+       // Places currentItemIndex = getItemIndexByTitle(itemTitle);
+
+       // inflateLayout(currentItemIndex);
 
     }
 

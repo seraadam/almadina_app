@@ -5,10 +5,21 @@ public class PlaceCategory {
     private String desc;
     private int pic;
 
-    public PlaceCategory(String name, String desc, int pic) {
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    private String value;
+
+    public PlaceCategory(String name, String desc, int pic , String value) {
         this.name = name;
         this.desc = desc;
         this.pic = pic;
+        this.value=value;
     }
 
     public PlaceCategory() {
