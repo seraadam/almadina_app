@@ -15,7 +15,7 @@ public class Places {
     }
 
     private String Description;
-    private int image_name;
+    private String image_name;
     private String lat;
     private String lang;
     private String Start;
@@ -49,11 +49,11 @@ public class Places {
         this.Title = title;
     }
 
-    public int getImage_name() {
+    public String getImage_name() {
         return image_name;
     }
 
-    public void setImage_name(int image_name) {
+    public void setImage_name(String image_name) {
         this.image_name = image_name;
     }
 
@@ -89,7 +89,7 @@ public class Places {
         this.End = end;
     }
 
-    public Places(String title, int image_name, String lat, String lang, String start, String end , String Description, int id , String Category) {
+    public Places(String title, String image_name, String lat, String lang, String start, String end , String Description, int id , String Category) {
         this.Title = title;
         this.image_name = image_name;
         this.lat = lat;

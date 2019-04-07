@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +16,16 @@ import android.widget.TextView;
 import com.example.project1.R;
 import com.example.project1.activities.ItemDetailsActivity;
 import com.example.project1.models.Places;
-import com.example.project1.models.Record;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 import java.util.List;
 
-public class ExploreDetailsAdapter extends ArrayAdapter<Record> {
+public class ExploreDetailsAdapter extends ArrayAdapter<Places> {
     private static final String ITEM_DETAILS_KEY = "item_details_key";
 
     private Activity mContext;
-    private List<Record> gplaces;
+    private List<Places> gplaces;
 
     public static class ViewHolder {
         public TextView tvw1;
@@ -39,7 +41,7 @@ public class ExploreDetailsAdapter extends ArrayAdapter<Record> {
         }
     }
 
-    public ExploreDetailsAdapter(Activity context, List<Record> gplaces) {
+    public ExploreDetailsAdapter(Activity context,  List<Places>  gplaces) {
         super(context, R.layout.list_item, gplaces);
 
         this.mContext = context;
@@ -67,11 +69,23 @@ public class ExploreDetailsAdapter extends ArrayAdapter<Record> {
 
         }
 
-        final Record pcat = gplaces.get(position);
+        final Places pcat = gplaces.get(position);
 
-        Picasso.with(mContext).load(pcat.getImageName()).into(viewHolder.ivw);
+
+        if(pcat.getImage_name().equals(null)){
+            viewHolder.ivw.setImageResource(R.drawable.ppp);
+        }
+        else{
+            // loading movie cover using Glide library
+            Log.e("image",pcat.getImage_name());
+           // Picasso.with(mContext).load(pcat.getImage_name()).into(viewHolder.ivw);
+
+        }
        // viewHolder.ivw.setImageDrawable(getDrawable("R.drawable."+ pcat.getImage_name()));
-        viewHolder.tvw1.setText(pcat.getTitle());
+        if(pcat.getTitle().equals(null)){
+            viewHolder.tvw1.setText("there are No places yet ");
+        }
+        else viewHolder.tvw1.setText(pcat.getTitle());
         viewHolder.tvw2.setText(pcat.getDescription());
         viewHolder.listItemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,5 +99,9 @@ public class ExploreDetailsAdapter extends ArrayAdapter<Record> {
         return convertView;
     }
 
+
+    public int getItemCount() {
+        return gplaces.size();
+    }
 
 }

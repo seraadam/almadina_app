@@ -41,7 +41,7 @@
                 android:gravity="left"
                 android:layout_alignParentTop="true"
                 android:textColor="#333"
-                android:textSize="22dp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -50,8 +50,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="5dp"
+                android:maxLines="2"
+                android:maxLength="50"
                 android:textColor="#333"
-                android:gravity="bottom" />
+                android:gravity="center" />
 
         </LinearLayout>
 
