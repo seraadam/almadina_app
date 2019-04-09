@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -47,6 +48,7 @@ public class ExploreDetailsActivity extends AppCompatActivity {
     String[] start;
     String[] end;
     String[] category;
+    long mRequestStartTime;
 
     private static final String EXPLORE_CATEGORY_KEY = "explore_category_key";
 
@@ -57,7 +59,7 @@ public class ExploreDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_explore);
         Intent intent = getIntent();
         String c = intent.getStringExtra(EXPLORE_CATEGORY_KEY);
-
+        Log.e("intent: " , c);
 //        id = new int[]{1, 2, 3};
 //        title = new String[]{"Prophets Mosque", "Uhud Mountain", "Taiba Restaurant"};
 //        desc = new String[]{"Visit and know more about Islamic places in Almadinah!", "Discover more historical places!", "Find out where to eat!"};
@@ -69,6 +71,7 @@ public class ExploreDetailsActivity extends AppCompatActivity {
 //        category = new String[]{"Islamic", "Historical", "Museum"
 //                , "Restaurant", "Shopping", "Event"};
         places = new ArrayList<>();
+
         mListView = findViewById(R.id.listview);
          exploreAdapter = new ExploreDetailsAdapter(this, places);
 
@@ -86,12 +89,15 @@ public class ExploreDetailsActivity extends AppCompatActivity {
 
 
         String url = "http://nomow.tech/tiba/api/place/read_category.php?category="+ category;
+         mRequestStartTime = System.currentTimeMillis();
         Log.e("Response: " , url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        long totalRequestTime = System.currentTimeMillis() - mRequestStartTime;
+                        Log.e("time: " , totalRequestTime+"responce");
                         try {
                             JSONArray obj = response.getJSONArray("category");
                             for (int i = 0; i < obj.length(); i++) {
@@ -106,6 +112,7 @@ public class ExploreDetailsActivity extends AppCompatActivity {
                                         jsonObject.getInt("PID") ,
                                         jsonObject.getString("Category"));
                                 Log.e("Response: " , p.getCategory());
+
 
                                 places.add(p);
                             }
@@ -123,6 +130,9 @@ public class ExploreDetailsActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         // As of f605da3 the following should work
                         NetworkResponse response = error.networkResponse;
+                        long totalRequestTime = System.currentTimeMillis() - mRequestStartTime;
+                        Log.e("time: " , response+"response");
+
                         if (error instanceof ServerError && response != null) {
                             try {
                                 String res = new String(response.data,
@@ -143,6 +153,10 @@ public class ExploreDetailsActivity extends AppCompatActivity {
                 });
 
 // Access the RequestQueue through your singleton class.
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         RequestQueue rq = Volley.newRequestQueue(getApplicationContext());
         rq.add(jsonObjectRequest);

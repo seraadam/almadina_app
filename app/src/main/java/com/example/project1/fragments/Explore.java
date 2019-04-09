@@ -55,12 +55,12 @@ public class Explore extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        OPTION_NAMES = new String[]{"Islamic Landmarks", "Historical Places","Museum", "Event","shopping mall", "Restaurants"};
+        OPTION_NAMES = new String[]{"Islamic Landmarks", "Historical Places","Events","Museum", "Restaurant","shopping mall"};
         OPTION_DESCRIPTION =new String[] {"Visit and know more about Islamic places in Almadinah!", "Discover more historical places!", "Visit and know more about Islamic places in Almadinah!",
                 "Visit and know more about Islamic places in Almadinah!","Visit and know more about Islamic places in Almadinah!","Find out where to eat!"};
-         OPTIONS_PICTURES = new int[]{R.drawable.pois, R.drawable.tripplanner, R.drawable.multimedia,R.drawable.pois, R.drawable.tripplanner, R.drawable.multimedia};
-         value = new String[]{"Islamic","Historical","Museum"
-                 ,"Restaurant","Shopping","Event"};
+         OPTIONS_PICTURES = new int[]{R.drawable.pois, R.drawable.tripplanner,R.drawable.madakheel, R.drawable.multimedia,R.drawable.shopping,R.drawable.restaurant};
+         value = new String[]{"Islamic","Historical","Event","Museum"
+                 ,"Restaurant","Shopping"};
 
     }
 

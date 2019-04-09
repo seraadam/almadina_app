@@ -1,15 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.TripPlanner">
+    tools:context=".fragments.TripPlanner"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:textSize="60sp"
+    <!--<com.riontech.calendar.CustomCalendar-->
+        <!--android:id="@+id/customCalendar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:endMonth="12"-->
+        <!--app:endYear="2019"-->
+        <!--app:startMonth="01"-->
+        <!--app:startYear="2016" />-->
+
+    <CalendarView
+        android:id="@+id/calendarView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Trip Planner fragment" />
+        android:layout_height="wrap_content"
+        android:minDate = "01/01/2017"
+        android:maxDate="01/01/2020"
+        />
 
-</FrameLayout>
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
+
+    <!--&lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;-->
+    <!--<TextView-->
+        <!--android:textSize="60sp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:text="Trip Planner fragment" />-->
+

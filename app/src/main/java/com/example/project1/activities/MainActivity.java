@@ -28,16 +28,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer);
+        mDrawerlayout =  findViewById(R.id.drawer);
         mToggle = new ActionBarDrawerToggle(this, mDrawerlayout, R.string.open, R.string.close);
         mDrawerlayout.addDrawerListener(mToggle);
-        NavigationView nvDrawer = (NavigationView) findViewById(R.id.nv);
+        NavigationView nvDrawer = findViewById(R.id.nv);
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setupDrawerContent(nvDrawer);
 
         android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.flcontent,new Home());
+        ft.replace(R.id.flcontent,new TripPlanner());
         ft.commit();
 
     }
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
+        assert myFragment != null;
         fragmentManager.beginTransaction().replace(R.id.flcontent, myFragment).commit();
         menuItem.setChecked(true);
         setTitle(menuItem.getTitle());

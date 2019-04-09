@@ -27,13 +27,13 @@ public class ExploreDetailsAdapter extends ArrayAdapter<Places> {
     private Activity mContext;
     private List<Places> gplaces;
 
-    public static class ViewHolder {
-        public TextView tvw1;
-        public TextView tvw2;
-        public ImageView ivw;
-        public LinearLayout listItemLayout;
+    private static class ViewHolder {
+        private TextView tvw1;
+        private TextView tvw2;
+        private ImageView ivw;
+        private LinearLayout listItemLayout;
 
-        public ViewHolder(View v) {
+        private ViewHolder(View v) {
             tvw1 = v.findViewById(R.id.menu_options);
             tvw2 = v.findViewById(R.id.options_desc);
             ivw = v.findViewById(R.id.imageView);
@@ -72,30 +72,28 @@ public class ExploreDetailsAdapter extends ArrayAdapter<Places> {
         final Places pcat = gplaces.get(position);
 
 
+       // viewHolder.ivw.setImageDrawable(getDrawable("R.drawable."+ pcat.getImage_name()));
+
+         viewHolder.tvw1.setText(pcat.getTitle());
+        viewHolder.tvw2.setText(pcat.getDescription());
+        viewHolder.listItemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent itemDetailsIntent = new Intent(mContext, ItemDetailsActivity.class);
+                itemDetailsIntent.putExtra(ITEM_DETAILS_KEY, gplaces.get(position).getId());
+                mContext.startActivity(itemDetailsIntent);
+            }
+        });
+
         if(pcat.getImage_name().equals(null)){
             viewHolder.ivw.setImageResource(R.drawable.ppp);
         }
         else{
             // loading movie cover using Glide library
             Log.e("image",pcat.getImage_name());
-           // Picasso.with(mContext).load(pcat.getImage_name()).into(viewHolder.ivw);
+            Picasso.with(mContext).load(pcat.getImage_name()).into(viewHolder.ivw);
 
         }
-       // viewHolder.ivw.setImageDrawable(getDrawable("R.drawable."+ pcat.getImage_name()));
-        if(pcat.getTitle().equals(null)){
-            viewHolder.tvw1.setText("there are No places yet ");
-        }
-        else viewHolder.tvw1.setText(pcat.getTitle());
-        viewHolder.tvw2.setText(pcat.getDescription());
-        viewHolder.listItemLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent itemDetailsIntent = new Intent(mContext, ItemDetailsActivity.class);
-                itemDetailsIntent.putExtra(ITEM_DETAILS_KEY, gplaces.get(position).getTitle());
-                mContext.startActivity(itemDetailsIntent);
-            }
-        });
-
         return convertView;
     }
 
