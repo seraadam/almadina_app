@@ -4,6 +4,7 @@
     <string name="close">Close</string>
 
     <string name="contact_form">Contact Us</string>
+    <string name="reserve">Reserve</string>
     <string name="contact_form_name">Your Name</string>
     <string name="contact_form_email">Your Email</string>
     <string name="contact_form_subject">Subject</string>

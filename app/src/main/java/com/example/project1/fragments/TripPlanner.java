@@ -5,19 +5,43 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.project1.R;
-import com.riontech.calendar.CustomCalendar;
+import com.example.project1.adapters.PlannerAdapter;
+import com.example.project1.models.Places;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+
+
 
 public class TripPlanner extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -25,10 +49,16 @@ public class TripPlanner extends Fragment {
 
     private String mParam1;
     private String mParam2;
+    private List<Places> places;
+    ListView mListView;
+    PlannerAdapter plannerAdapter;
+    public String pday=null;
+    public String pmonth=null;
+    public String pyear=null;
 
     private OnFragmentInteractionListener mListener;
     private CalendarView customCalendar;
-
+    long mRequestStartTime;
     public TripPlanner() {}
 
     public static TripPlanner newInstance(String param1, String param2) {
@@ -69,17 +99,194 @@ public class TripPlanner extends Fragment {
             // Move next day
             mCalendar.add(Calendar.DAY_OF_YEAR, 1);
         }
+
+
+        places = new ArrayList<>();
+
+        mListView = v.findViewById(R.id.listview);
+        plannerAdapter = new PlannerAdapter(getActivity(), places);
+
+        mListView.setAdapter(plannerAdapter);
+
         customCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                String msg = "Selected date Day: " + dayOfMonth + " Month : " + (month + 1) + " Year " + year;
+               // String msg = "Selected date Day: " + dayOfMonth + " Month : " + (month + 1) + " Year " + year;
                 //http://nomow.tech/tiba/api/place/read_dates.php?pdate=2019-09-09
+                    pday = dayOfMonth+"";
+                    int o = month+ 1;
+                    pmonth= o + "";
+                    pyear=year+"";
+                Log.e("Response: " ,pyear+pmonth+ pday);
+                String url = "http://nomow.tech/tiba/api/place/read_dates.php?pdate="+ year + "-" + month + "-" + dayOfMonth;
+                Log.e("url",url);
 
-                Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                mRequestStartTime = System.currentTimeMillis();
+                Log.e("Response: " , url);
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                        (Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                long totalRequestTime = System.currentTimeMillis() - mRequestStartTime;
+                                places.clear();
+                                Log.e("time: " , totalRequestTime+"responce");
+                                try {
+                                    JSONArray obj = response.getJSONArray("records");
+                                    for (int i = 0; i < obj.length(); i++) {
+                                        JSONObject jsonObject = obj.getJSONObject(i);
+                                        Places p = new Places( jsonObject.getString("Title"),
+                                                jsonObject.getString("image_name") ,
+                                                jsonObject.getString("lat"),
+                                                jsonObject.getString("lang"),
+                                                jsonObject.getString("Start"),
+                                                jsonObject.getString("End"),
+                                                jsonObject.getString("Description"),
+                                                jsonObject.getInt("PID") ,
+                                                jsonObject.getString("Category"));
+                                        Log.e("Response: " , p.getCategory());
+
+
+                                        places.add(p);
+                                    }
+
+                                    plannerAdapter.notifyDataSetChanged();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+
+                                }
+
+                            }
+                        }, new Response.ErrorListener() {
+
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // As of f605da3 the following should work
+                                NetworkResponse response = error.networkResponse;
+                                long totalRequestTime = System.currentTimeMillis() - mRequestStartTime;
+                                Log.e("time: " , response+"response");
+
+                                places.clear();
+                                plannerAdapter.notifyDataSetChanged();
+
+                                if (error instanceof ServerError && response != null) {
+                                    try {
+                                        String res = new String(response.data,
+                                                HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                        // Now you can use any deserializer to make sense of data
+                                        JSONObject obj = new JSONObject(res);
+                                        Log.i("obj : ", obj.toString());
+                                    } catch (UnsupportedEncodingException e1) {
+                                        // Couldn't properly decode data to string
+                                        e1.printStackTrace();
+                                    } catch (JSONException e2) {
+                                        // returned data is not JSONObject?
+                                        e2.printStackTrace();
+                                    }
+                                }
+
+                            }
+                        });
+
+// Access the RequestQueue through your singleton class.
+                jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                        5000,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+                RequestQueue rq = Volley.newRequestQueue(getContext());
+                rq.add(jsonObjectRequest);
+
+               // Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
             }
         });
 
+        plannerAdapter.setListener(new PlannerAdapter.AdapterListener() {
+            @Override
+            public void onClick(int id) {
 
+               // String url = "http://nomow.tech/tiba/api/plan/create.php";
+
+                mRequestStartTime = System.currentTimeMillis();
+
+                final String vid = "7";
+                final String pid = id +"";
+
+                final String date= pyear+"-"+ pmonth +"-"+pday;
+
+                Log.e("Response: " , date);
+                Log.e("Response: " , pid);
+
+                final String URL = "http://nomow.tech/tiba/api/plan/create.php";
+                Log.e("Response:",URL+"2");
+
+
+                JSONObject jsonBodyObj = new JSONObject();
+                try {
+                    jsonBodyObj.put("VID", vid);
+                    jsonBodyObj.put("PID", pid);
+                    jsonBodyObj.put("Date", date);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                final String requestBody = jsonBodyObj.toString();
+                Log.e("Response:",requestBody);
+
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("LOG_VOLLEY", response);
+                        Toast.makeText(getActivity().getApplicationContext(),"Place is added succesfully",Toast.LENGTH_LONG).show();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("LOG_VOLLEY", error.toString());
+                    }
+                }) {
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8";
+                    }
+
+                    @Override
+                    public byte[] getBody() throws AuthFailureError {
+                        try {
+                            return requestBody == null ? null : requestBody.getBytes("utf-8");
+                        } catch (UnsupportedEncodingException uee) {
+                            VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                            return null;
+                        }
+                    }
+
+                    @Override
+                    protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                        String responseString = "";
+                        if (response != null) {
+
+                            responseString = String.valueOf(response.statusCode);
+
+                        }
+                        return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                    }
+                };
+
+
+// Access the RequestQueue through your singleton class.
+                stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                        5000,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+                RequestQueue rr = Volley.newRequestQueue(getContext());
+                rr.add(stringRequest);
+            }
+
+
+        });
+
+        
         return v;
     }
 

@@ -39,15 +39,7 @@ public class ExploreDetailsActivity extends AppCompatActivity {
     private List<Places> places;
     ListView mListView;
     ExploreDetailsAdapter exploreAdapter;
-    String[] title ;
-    int[] id ;
-    String[] desc ;
-    int[] image_name ;
-    String[] lat;
-    String[] lang;
-    String[] start;
-    String[] end;
-    String[] category;
+
     long mRequestStartTime;
 
     private static final String EXPLORE_CATEGORY_KEY = "explore_category_key";
@@ -60,6 +52,7 @@ public class ExploreDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String c = intent.getStringExtra(EXPLORE_CATEGORY_KEY);
         Log.e("intent: " , c);
+
 //        id = new int[]{1, 2, 3};
 //        title = new String[]{"Prophets Mosque", "Uhud Mountain", "Taiba Restaurant"};
 //        desc = new String[]{"Visit and know more about Islamic places in Almadinah!", "Discover more historical places!", "Find out where to eat!"};
@@ -86,7 +79,6 @@ public class ExploreDetailsActivity extends AppCompatActivity {
 
 
     public void fillplaces(String category){
-
 
         String url = "http://nomow.tech/tiba/api/place/read_category.php?category="+ category;
          mRequestStartTime = System.currentTimeMillis();
