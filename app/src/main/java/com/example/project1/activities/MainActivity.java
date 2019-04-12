@@ -14,6 +14,7 @@ import com.example.project1.fragments.ContactUs;
 import com.example.project1.fragments.Explore;
 import com.example.project1.fragments.Home;
 import com.example.project1.fragments.Map;
+import com.example.project1.fragments.Mapplace;
 import com.example.project1.fragments.Multimedia;
 import com.example.project1.R;
 import com.example.project1.fragments.Setting;
