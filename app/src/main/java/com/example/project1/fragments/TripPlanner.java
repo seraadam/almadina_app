@@ -1,10 +1,17 @@
 package com.example.project1.fragments;
 
+import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +19,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -42,6 +51,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -60,11 +70,22 @@ public class TripPlanner extends Fragment {
     public String pmonth=null;
     public String pyear=null;
 
+
     private OnFragmentInteractionListener mListener;
     private CalendarView customCalendar;
     private Spinner spinner1;
     private Spinner spinner2;
-    private Button btnSubmit;
+    private Button btnSubmit,start ,end;
+
+
+    private DatePicker datePicker;
+    private Calendar calendar;
+    private TextView dateView;
+    private int year, month, day;
+    public static final int REQUEST_CODE = 11; // Used to identify the result
+    public static final int REQUEST_CODE2 = 15; // Used to identify the result
+
+
     long mRequestStartTime;
     public TripPlanner() {}
 
@@ -98,18 +119,37 @@ public class TripPlanner extends Fragment {
         spinner1 = (Spinner) v.findViewById(R.id.spinner1);
         spinner2 = (Spinner) v.findViewById(R.id.spinner2);
         btnSubmit= (Button) v.findViewById(R.id.btnSubmit);
+        start= (Button) v.findViewById(R.id.start);
+        end= (Button) v.findViewById(R.id.end);
+
+       // dateView = (TextView) v.findViewById(R.id.textView3);
+        // get fragment manager so we can launch from fragment
+        final FragmentManager fm = ((AppCompatActivity)getActivity()).getSupportFragmentManager();
 
 
-//        Calendar mCalendar = Calendar.getInstance();
-//        int daysInMonth = mCalendar.getActualMaximum(Calendar.DAY_OF_YEAR);
-//        ArrayList<String> allDays = new ArrayList<String>();
-//        SimpleDateFormat mFormat = new SimpleDateFormat("EEE, dd MMM", Locale.US);
-//        for(int i = 0; i < daysInMonth; i++){
-//            // Add day to list
-//            allDays.add(mFormat.format(mCalendar.getTime()));
-//            // Move next day
-//            mCalendar.add(Calendar.DAY_OF_YEAR, 1);
-//        }
+       start.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               // create the datePickerFragment
+               AppCompatDialogFragment startFragment = new DatePickerFragment();
+               // set the targetFragment to receive the results, specifying the request code
+               startFragment.setTargetFragment(TripPlanner.this, REQUEST_CODE);
+               // show the datePicker
+               startFragment.show(fm, "datePicker");
+           }
+       });
+
+        end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // create the datePickerFragment
+                AppCompatDialogFragment endFragment = new DatePickerFragment();
+                // set the targetFragment to receive the results, specifying the request code
+                endFragment.setTargetFragment(TripPlanner.this, REQUEST_CODE2);
+                // show the datePicker
+                endFragment.show(fm, "datePicker");
+            }
+        });
 
 btnSubmit.setOnClickListener(new View.OnClickListener() {
 
@@ -313,16 +353,59 @@ btnSubmit.setOnClickListener(new View.OnClickListener() {
         return v;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // check for the results
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // get date from string
+           String selectedDate = data.getStringExtra("selectedDate");
+
+            // set the value of the editText
+            Log.e("date",selectedDate);
+            start.setText(selectedDate);
+
+        }else if (requestCode == REQUEST_CODE2 && resultCode == Activity.RESULT_OK ) {
+            // get date from string
+            String selectedDate2 = data.getStringExtra("selectedDate");
+            // set the value of the editText
+            Log.e("date",selectedDate2);
+
+            end.setText(selectedDate2);
+        }
+    }
+
+    public static boolean isDateAfter(String startDate,String endDate)
+    {
+        try
+        {
+            String myFormatString = "yyyy-M-dd"; // for example
+            SimpleDateFormat df = new SimpleDateFormat(myFormatString);
+            Date date1 = df.parse(endDate);
+            Date startingDate = df.parse(startDate);
+
+            if (date1.after(startingDate))
+                return true;
+            else
+                return false;
+        }
+        catch (Exception e)
+        {
+
+            return false;
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     @Override

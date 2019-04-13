@@ -23,25 +23,68 @@
         <!--android:isScrollContainer="true"-->
         <!--android:maxDate="01/01/2020"-->
         <!--/>-->
+    <LinearLayout
 
-    <Spinner
-        android:id="@+id/spinner1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:orientation="horizontal">
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:entries="@array/category"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:prompt="@string/country_prompt" />
 
     <Spinner
         android:id="@+id/spinner2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:entries="@array/nationality"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:prompt="@string/nationality_prompt"/>
+    </LinearLayout>
+    <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/nationality"
-        android:prompt="@string/nationality_prompt"/>
+        android:weightSum="2"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:onClick="startDate"
+            android:layout_weight="1"
+            android:text="Start Date" />
 
+        <Button
+            android:id="@+id/end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:onClick="entDate"
+            android:text="End Date" />
+
+
+    </LinearLayout>
     <Button
         android:id="@+id/btnSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_gravity="center_horizontal"
         android:text="Submit" />
 
 

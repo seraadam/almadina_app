@@ -1,5 +1,6 @@
 package com.example.project1.activities;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -20,7 +21,7 @@ import com.example.project1.R;
 import com.example.project1.fragments.Setting;
 import com.example.project1.fragments.TripPlanner;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TripPlanner.OnFragmentInteractionListener {
     private DrawerLayout mDrawerlayout;
     private ActionBarDrawerToggle mToggle;
 
@@ -101,5 +102,10 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
