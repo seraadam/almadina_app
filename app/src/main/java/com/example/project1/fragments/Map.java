@@ -22,21 +22,38 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.project1.models.Places;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 
 import com.example.project1.R;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,20 +68,19 @@ public class Map extends Fragment implements GoogleMap.OnInfoWindowClickListener
     private OnFragmentInteractionListener mListener;
     GoogleMap map;
     private static View view;
-    HashMap<String, HashMap> extraMarkerInfo;
+    HashMap<String, Places> extraMarkerInfo;
     final List<Marker> PlacesMarkers = new ArrayList<Marker>();
-
+    Places p ;
     List<Marker> pinslist = new ArrayList<Marker>();
-    GeoDataClient mGeoDataClient;
-    Marker placesMarkers ;
-    PlaceDetectionClient mPlaceDetectionClient;
-    FusedLocationProviderClient mFusedLocationProviderClient;
+
     private boolean mLocationPermissionGranted;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private LatLng mLastKnownLocation;
     private final LatLng mDefaultLocation = new LatLng(24.470901, 39.612236);
     private static final int DEFAULT_ZOOM = 15;
     LocationManager locationManager;
+    Location l;
+    long mRequestStartTime;
     public String bestProvider;
     public Criteria criteria;
 
@@ -87,7 +103,7 @@ public class Map extends Fragment implements GoogleMap.OnInfoWindowClickListener
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        getLocation();
+
     }
 
 
@@ -101,14 +117,19 @@ public class Map extends Fragment implements GoogleMap.OnInfoWindowClickListener
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            mLocationPermissionGranted = true;
-
             final LocationManager manager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+            boolean isGPSEnabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            Log.e("location 6",isGPSEnabled+"" );
 
-            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            if (!isGPSEnabled) {
+                mLocationPermissionGranted = true;
+                Log.e("location 7",mLastKnownLocation+"" );
                 buildAlertMessageNoGps();
+        }else{
+                Log.e("location 10","" );
+                getLocation();
 
-        }
+            }
 
 
         } else {
@@ -135,6 +156,8 @@ public class Map extends Fragment implements GoogleMap.OnInfoWindowClickListener
                 });
         final AlertDialog alert = builder.create();
         alert.show();}
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
@@ -146,6 +169,7 @@ public class Map extends Fragment implements GoogleMap.OnInfoWindowClickListener
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
+                    Log.e("location 8",permissions+"" );
                 }
         }
         updateLocationUI();
@@ -183,46 +207,117 @@ public class Map extends Fragment implements GoogleMap.OnInfoWindowClickListener
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        updateLocationUI();
-        getLocation();
 
        // LatLng camlocation = new LatLng(24.470901, 39.612236);
+
         map.moveCamera(CameraUpdateFactory.newLatLng(mDefaultLocation));
         map.animateCamera(CameraUpdateFactory.zoomTo(11), 2000, null);
-
-        extraMarkerInfo = new HashMap<String, HashMap>();
-
+       // updateLocationUI();
+       // getLocation();
+        extraMarkerInfo = new HashMap<String, Places>();
+        Log.e("location 9", "ready" );
         double lat, log;
-        String lat1;// = p.getLatitude();
-        String log1; //= p.getLongitude();
 
-//        lat = new Double(lat1);
-//        log = new Double(log1);
-//        LatLng location = new LatLng(lat, log);
-//
-//        Marker startupsMaeker = map.addMarker(new MarkerOptions().position(location).title(p.getTitle())
-//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.startuppins))
-//                .snippet(p.getDescription()));
-//
-//        // When you created the marker you store the extra data from your JSON in another variable (HashMap for example)
-//        HashMap<String, String> data = new HashMap<String, String>();
-//
-//        data.put("title", p.getTitle());
-//        data.put("city", p.getAdress());
-//        data.put("email", p.getEmail());
-//        data.put("phone", p.getPhone());
-//        data.put("category", p.getCategory());
-//        data.put("description", p.getDescription());
-//        data.put("founded", p.getFounded());
-//        data.put("website", p.getWebsite());
-//        data.put("employee", p.getemployee());
-//
-//        // Save this marker data in your previously made HashMap mapped to the marker ID. So you can get it back based on the marker ID
-//        extraMarkerInfo.put(startupsMaeker.getId(), data);
-//        StartupsMaekers.add(startupsMaeker);
-//        pinslist.add(startupsMaeker);
+        String url = "http://nomow.tech/tiba/api/place/read.php";
+        Log.e("url",url);
+
+         mRequestStartTime = System.currentTimeMillis();
+        Log.e("Response: " , url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        long totalRequestTime = System.currentTimeMillis() - mRequestStartTime;
+
+                        Log.e("time: " , totalRequestTime+"responce");
+                        try {
+
+                            JSONArray obj = response.getJSONArray("records");
+                            for (int i = 0; i < obj.length(); i++) {
 
 
+
+                                JSONObject jsonObject = obj.getJSONObject(i);
+
+                                double lat, log;
+                                String lat1 = jsonObject.getString("lat");
+                                String log1=jsonObject.getString("lang");
+                                lat = new Double(lat1);
+                                log = new Double(log1);
+
+                                LatLng location = new LatLng(lat, log);
+
+                                Marker placesmarkers = map.addMarker(new MarkerOptions().position(location).title(jsonObject.getString("Title"))
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.copin
+                                        ))
+                                        .snippet( jsonObject.getString("Description")));
+
+
+                                Places p = new Places( jsonObject.getString("Title"),
+                                        jsonObject.getString("image_name") ,
+                                        jsonObject.getString("lat"),
+                                        jsonObject.getString("lang"),
+                                        jsonObject.getString("Start"),
+                                        jsonObject.getString("End"),
+                                        jsonObject.getString("Description"),
+                                        jsonObject.getInt("PID") ,
+                                        jsonObject.getString("Category"));
+                                Log.e("Response: " , p.getCategory());
+                                // When you created the marker you store the extra data from your JSON in another variable (HashMap for example)
+
+                                extraMarkerInfo.put(placesmarkers.getId(), p);
+                                PlacesMarkers.add(placesmarkers);
+                                pinslist.add(placesmarkers);
+                                placesmarkers.showInfoWindow();
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // As of f605da3 the following should work
+                        NetworkResponse response = error.networkResponse;
+                        long totalRequestTime = System.currentTimeMillis() - mRequestStartTime;
+                        Log.e("time: " , response+"response");
+
+
+                        if (error instanceof ServerError && response != null) {
+                            try {
+                                String res = new String(response.data,
+                                        HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                // Now you can use any deserializer to make sense of data
+                                JSONObject obj = new JSONObject(res);
+                                Log.i("obj : ", obj.toString());
+                            } catch (UnsupportedEncodingException e1) {
+                                // Couldn't properly decode data to string
+                                e1.printStackTrace();
+                            } catch (JSONException e2) {
+                                // returned data is not JSONObject?
+                                e2.printStackTrace();
+                            }
+                        }
+
+                    }
+                });
+
+// Access the RequestQueue through your singleton class.
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueue rq = Volley.newRequestQueue(getContext());
+        rq.add(jsonObjectRequest);
+
+        map.setOnInfoWindowClickListener(this);
     }
 
     private void updateLocationUI() {
@@ -233,6 +328,7 @@ public class Map extends Fragment implements GoogleMap.OnInfoWindowClickListener
             if (mLocationPermissionGranted) {
                 map.setMyLocationEnabled(true);
                 map.getUiSettings().setMyLocationButtonEnabled(true);
+                Log.e("location 4",mLocationPermissionGranted+"" );
             } else {
 
                 map.setMyLocationEnabled(false);
@@ -259,10 +355,12 @@ public class Map extends Fragment implements GoogleMap.OnInfoWindowClickListener
 
                 //You can still do this if you like, you might get lucky:
                 Location location = locationManager.getLastKnownLocation(bestProvider);
+                if(location.getLatitude()!=0)
+                Log.e("location 2",location.getLatitude()+"" );
                 if (location != null) {
                     Log.e("TAG", "GPS is on");
                     mLastKnownLocation =  new LatLng(location.getLatitude(),location.getLongitude());
-
+                    Log.e("location 3",location.getLatitude()+"" );
                    // Toast.makeText(MainActivity.this, "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
                     //searchNearestPlace(voice2text);
                 }
@@ -279,9 +377,11 @@ public class Map extends Fragment implements GoogleMap.OnInfoWindowClickListener
     @Override
     public void onLocationChanged(Location location) {
         //remove location callback:
+
         locationManager.removeUpdates(this);
         mLastKnownLocation =  new LatLng(location.getLatitude(),location.getLongitude());
         map.moveCamera(CameraUpdateFactory.newLatLng(mLastKnownLocation));
+        Log.e("location 1",location.getLatitude()+"" );
     }
 
     @Override
