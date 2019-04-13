@@ -23,11 +23,11 @@ public class CustomRequest extends Request<JSONObject> {
         this.params = params;
     }
 
-    public CustomRequest(int method, String url, Map<String, String> params,
+    public CustomRequest(int method, String url,
                          Listener<JSONObject> reponseListener, ErrorListener errorListener) {
         super(method, url, errorListener);
         this.listener = reponseListener;
-        this.params = params;
+
     }
 
     protected Map<String, String> getParams()

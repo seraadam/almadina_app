@@ -11,19 +11,39 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical">
 
-    <CalendarView
-        android:id="@+id/calendarView"
+    <!--<CalendarView-->
+        <!--android:id="@+id/calendarView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:minDate = "01/01/2017"-->
+
+        <!--android:scrollbarAlwaysDrawVerticalTrack="true"-->
+        <!--android:isScrollContainer="true"-->
+        <!--android:maxDate="01/01/2020"-->
+        <!--/>-->
+
+    <Spinner
+        android:id="@+id/spinner1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minDate = "01/01/2017"
+        android:entries="@array/category"
+        android:prompt="@string/country_prompt" />
 
-        android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:isScrollContainer="true"
-        android:maxDate="01/01/2020"
-        />
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/nationality"
+        android:prompt="@string/nationality_prompt"/>
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit" />
+
 
     <ListView
         android:id="@+id/listview"

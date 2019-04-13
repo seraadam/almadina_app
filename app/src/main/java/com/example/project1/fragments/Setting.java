@@ -1,14 +1,21 @@
 package com.example.project1.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.project1.R;
+import com.example.project1.activities.LoginActivity;
+import com.example.project1.activities.MainActivity;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class Setting extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -18,6 +25,8 @@ public class Setting extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    public Button logout;
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
 
     public Setting() {}
 
@@ -42,7 +51,23 @@ public class Setting extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_setting, container, false);
+        View v = inflater.inflate(R.layout.fragment_setting, container, false);
+        logout = v.findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferences.Editor editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+                editor.putString("email",null);
+                editor.apply();
+
+                Intent register = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
+                register.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().getApplicationContext().startActivity(register);
+
+            }
+        });
+        return v;
     }
 
     public void onButtonPressed(Uri uri) {

@@ -2,6 +2,27 @@
     <string name="app_name">Taiba Guide</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="country_prompt">Choose a category</string>
+    <string name="nationality_prompt">Choose a nationality</string>
+
+    <string-array name="category">
+        <item>Islamic</item>
+        <item> Historical</item>
+        <item>Museum</item>
+        <item>Restaurant</item>
+        <item>Shopping</item>
+        <item>Event</item>
+    </string-array>
+
+    <string-array name="nationality">
+        <item>indonesian</item>
+        <item> malaysian</item>
+        <item>Syrian</item>
+        <item>Turkey</item>
+        <item>Pakistan</item>
+
+    </string-array>
+
 
     <string name="contact_form">Contact Us</string>
     <string name="reserve">Reserve</string>
@@ -47,7 +68,6 @@
     </string-array>
 
 
-
     <!-- Restaurants -->
     <string name="poi_restaurants_1_title">Taiba Restaurant</string>
     <string name="poi_restaurants_1_location">Medinah</string>
@@ -56,7 +76,6 @@
         <item>Saudi Food</item>
         <item>Vegetarian Friendly</item>
     </string-array>
-
 
 
     <!-- Hotel -->
@@ -73,5 +92,6 @@
         <item>Pool</item>
         <item>Non-Smoking Hotel</item>
     </string-array>
+    <string name="title_activity_register">RegisterActivity</string>
 
 </resources>

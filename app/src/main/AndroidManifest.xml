@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.project1">
+    package="com.example.project1" android:targetSandboxVersion="1">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -8,26 +8,35 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
+        android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:hardwareAccelerated="false"
-        android:largeHeap="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity">
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activities.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.MainActivity">
+
+        </activity>
         <activity android:name=".activities.ExploreDetailsActivity" />
         <activity android:name=".activities.ItemDetailsActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBA-ofl7r3ThZPIwcq-PxyqKMriJijfbnY"/>
+            android:value="AIzaSyBA-ofl7r3ThZPIwcq-PxyqKMriJijfbnY" />
     </application>
 
 </manifest>

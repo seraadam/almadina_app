@@ -37,11 +37,13 @@ public class PlannerAdapter extends ArrayAdapter<Places> {
         public ImageView ivw;
         public LinearLayout listItemLayout;
         public Button serve;
+        public TextView reserved;
 
         public ViewHolder(View v) {
 
             tvw1 = v.findViewById(R.id.menu_options);
             tvw2 = v.findViewById(R.id.options_desc);
+            reserved = v.findViewById(R.id.reserved);
             ivw = v.findViewById(R.id.imageView);
             listItemLayout = v.findViewById(R.id.list_item_layout);
             serve = v.findViewById(R.id.reserve);
@@ -105,6 +107,7 @@ public class PlannerAdapter extends ArrayAdapter<Places> {
             public void onClick(View view) {
                 mListener.onClick(pcat.getId());
                 viewHolder.serve.setVisibility(View.GONE);
+                //viewHolder.reserved.setVisibility(View.VISIBLE);
             }
         });
 

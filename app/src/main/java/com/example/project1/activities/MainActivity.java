@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         setupDrawerContent(nvDrawer);
 
         android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.flcontent,new Map());
+        ft.replace(R.id.flcontent,new Home());
         ft.commit();
 
     }
