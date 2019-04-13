@@ -107,7 +107,7 @@ public class PlannerAdapter extends ArrayAdapter<Places> {
             public void onClick(View view) {
                 mListener.onClick(pcat.getId());
                 viewHolder.serve.setVisibility(View.GONE);
-                //viewHolder.reserved.setVisibility(View.VISIBLE);
+                viewHolder.reserved.setVisibility(View.VISIBLE);
             }
         });
 

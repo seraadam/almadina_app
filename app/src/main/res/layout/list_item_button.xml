@@ -11,16 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/reserved"
-            android:visibility="gone"
+            android:visibility="invisible"
             android:layout_weight="1"
             android:layout_gravity="center_vertical|center_horizontal"
             android:textColor="#DB1414"
             android:text="Reserved"
-            tools:ignore="DuplicateIds" />
+            />
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="100dp"
