@@ -32,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.project1.activities.ItemDetailsActivity;
 import com.example.project1.models.Places;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -61,28 +62,27 @@ import java.util.List;
 public class Map extends Fragment implements GoogleMap.OnInfoWindowClickListener , OnMapReadyCallback , LocationListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private static final int DEFAULT_ZOOM = 15;
+    private static final String ITEM_DETAILS_KEY = "item_details_key";
 
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-    GoogleMap map;
     private static View view;
-    HashMap<String, Places> extraMarkerInfo;
     final List<Marker> PlacesMarkers = new ArrayList<Marker>();
+    private final LatLng mDefaultLocation = new LatLng(24.470901, 39.612236);
+    public String bestProvider;
+    public Criteria criteria;
+    GoogleMap map;
+    HashMap<String, Places> extraMarkerInfo;
     Places p ;
     List<Marker> pinslist = new ArrayList<Marker>();
-
-    private boolean mLocationPermissionGranted;
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private LatLng mLastKnownLocation;
-    private final LatLng mDefaultLocation = new LatLng(24.470901, 39.612236);
-    private static final int DEFAULT_ZOOM = 15;
     LocationManager locationManager;
     Location l;
     long mRequestStartTime;
-    public String bestProvider;
-    public Criteria criteria;
+    private String mParam1;
+    private String mParam2;
+    private OnFragmentInteractionListener mListener;
+    private boolean mLocationPermissionGranted;
+    private LatLng mLastKnownLocation;
 
     public Map() {}
 
@@ -201,7 +201,11 @@ public class Map extends Fragment implements GoogleMap.OnInfoWindowClickListener
 
     @Override
     public void onInfoWindowClick(Marker marker) {
+       Places marker_data = extraMarkerInfo.get(marker.getId());
 
+        Intent itemDetailsIntent = new Intent(getContext(), ItemDetailsActivity.class);
+        itemDetailsIntent.putExtra(ITEM_DETAILS_KEY, marker_data.getId());
+        getContext().startActivity(itemDetailsIntent);
     }
 
     @Override
