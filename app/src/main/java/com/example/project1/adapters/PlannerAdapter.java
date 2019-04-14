@@ -51,7 +51,7 @@ public class PlannerAdapter extends ArrayAdapter<Places> {
     }
 
     public PlannerAdapter(Activity context, List<Places> gplaces) {
-        super(context, R.layout.list_item, gplaces);
+        super(context, R.layout.list_item_button, gplaces);
 
         this.mContext = context;
         this.gplaces= gplaces;

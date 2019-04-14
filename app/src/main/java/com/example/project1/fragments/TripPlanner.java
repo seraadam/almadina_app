@@ -69,7 +69,7 @@ public class TripPlanner extends Fragment {
     public String pday=null;
     public String pmonth=null;
     public String pyear=null;
-
+    public  String selectedDate;
 
     private OnFragmentInteractionListener mListener;
     private CalendarView customCalendar;
@@ -161,12 +161,9 @@ btnSubmit.setOnClickListener(new View.OnClickListener() {
         String text = spinner1.getSelectedItem().toString();
 
         Log.e("responce spinner", text);
-//        pday = dayOfMonth+"";
-//        int o = month+ 1;
-//        pmonth= o + "";
-//        pyear=year+"";
+
         Log.e("Response: " ,pyear+pmonth+ pday);
-        String url = "http://nomow.tech/tiba/api/place/read_dates.php?pdate=2019-04-01";
+        String url = "http://nomow.tech/tiba/api/place/read_dates.php?pdate="+ selectedDate;
         Log.e("url",url);
 
         mRequestStartTime = System.currentTimeMillis();
@@ -360,11 +357,12 @@ btnSubmit.setOnClickListener(new View.OnClickListener() {
         // check for the results
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             // get date from string
-           String selectedDate = data.getStringExtra("selectedDate");
+            selectedDate = data.getStringExtra("selectedDate");
 
             // set the value of the editText
             Log.e("date",selectedDate);
             start.setText(selectedDate);
+
 
         }else if (requestCode == REQUEST_CODE2 && resultCode == Activity.RESULT_OK ) {
             // get date from string
