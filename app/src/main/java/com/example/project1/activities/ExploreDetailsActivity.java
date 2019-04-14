@@ -153,11 +153,6 @@ public class ExploreDetailsActivity extends AppCompatActivity {
         RequestQueue rq = Volley.newRequestQueue(getApplicationContext());
         rq.add(jsonObjectRequest);
 
-//        for (int i = 0; i < 2 ; i++) {
-//            RetroPlace c = new RetroPlace( title[i],
-//                image_name[i], lat[i], lang[i], start[i],end[i] ,desc[i], id[i], category[i]);
-//            places.add(c);
-//        }
 
     }
 

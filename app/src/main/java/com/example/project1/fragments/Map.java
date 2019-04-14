@@ -247,33 +247,35 @@ public class Map extends Fragment implements GoogleMap.OnInfoWindowClickListener
                                 double lat, log;
                                 String lat1 = jsonObject.getString("lat");
                                 String log1=jsonObject.getString("lang");
-                                lat = new Double(lat1);
-                                log = new Double(log1);
+                                if(! lat1.isEmpty()|| ! log1.isEmpty()|| !lat1.equals(null)|| !log1.equals(null)) {
+                                    lat = new Double(lat1);
+                                    log = new Double(log1);
 
-                                LatLng location = new LatLng(lat, log);
+                                    LatLng location = new LatLng(lat, log);
 
-                                Marker placesmarkers = map.addMarker(new MarkerOptions().position(location).title(jsonObject.getString("Title"))
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.copin
-                                        ))
-                                        .snippet( jsonObject.getString("Description")));
+                                    Marker placesmarkers = map.addMarker(new MarkerOptions().position(location).title(jsonObject.getString("Title"))
+                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.copin
+                                            ))
+                                            .snippet(jsonObject.getString("Description")));
 
 
-                                Places p = new Places( jsonObject.getString("Title"),
-                                        jsonObject.getString("image_name") ,
-                                        jsonObject.getString("lat"),
-                                        jsonObject.getString("lang"),
-                                        jsonObject.getString("Start"),
-                                        jsonObject.getString("End"),
-                                        jsonObject.getString("Description"),
-                                        jsonObject.getInt("PID") ,
-                                        jsonObject.getString("Category"));
-                                Log.e("Response: " , p.getCategory());
-                                // When you created the marker you store the extra data from your JSON in another variable (HashMap for example)
+                                    Places p = new Places(jsonObject.getString("Title"),
+                                            jsonObject.getString("image_name"),
+                                            jsonObject.getString("lat"),
+                                            jsonObject.getString("lang"),
+                                            jsonObject.getString("Start"),
+                                            jsonObject.getString("End"),
+                                            jsonObject.getString("Description"),
+                                            jsonObject.getInt("PID"),
+                                            jsonObject.getString("Category"));
+                                    Log.e("Response: ", p.getCategory());
+                                    // When you created the marker you store the extra data from your JSON in another variable (HashMap for example)
 
-                                extraMarkerInfo.put(placesmarkers.getId(), p);
-                                PlacesMarkers.add(placesmarkers);
-                                pinslist.add(placesmarkers);
-                                placesmarkers.showInfoWindow();
+                                    extraMarkerInfo.put(placesmarkers.getId(), p);
+                                    PlacesMarkers.add(placesmarkers);
+                                    pinslist.add(placesmarkers);
+                                    placesmarkers.showInfoWindow();
+                                }
 
                             }
 
