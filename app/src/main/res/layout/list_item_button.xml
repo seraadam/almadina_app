@@ -10,6 +10,7 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/list_item_layout"
         android:layout_width="match_parent"
+        android:weightSum="4"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
@@ -54,9 +55,9 @@
                 android:layout_weight="1"
                 android:gravity="left"
                 android:layout_alignParentTop="true"
-                android:textColor="#333"
+                android:textColor="#009688"
                 tools:text="title"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -64,14 +65,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingLeft="5dp"
                 tools:text = "description description description
                 description description description description description
                 description description description description"
                 android:maxLines="2"
                 android:maxLength="50"
                 android:textColor="#333"
-                android:gravity="center" />
+                android:gravity="left" />
 
 
 
@@ -81,6 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/reserve"
+            android:layout_weight="1"
             android:layout_gravity="center_vertical|center_horizontal"
             android:text="@string/reserve"/>
 
