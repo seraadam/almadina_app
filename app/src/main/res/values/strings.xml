@@ -15,12 +15,11 @@
     </string-array>
 
     <string-array name="nationality">
-        <item>indonesian</item>
-        <item> malaysian</item>
+        <item>Indonesian</item>
+        <item>Malaysian</item>
         <item>Syrian</item>
-        <item>Turkey</item>
+        <item>Turkish</item>
         <item>Pakistan</item>
-
     </string-array>
 
 
