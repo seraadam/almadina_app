@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -86,8 +87,13 @@ public class ImagesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.e("id",mParam1+"");
+
+
+
         View r = inflater.inflate(R.layout.fragment_images, container, false);
         photos =  r.findViewById(R.id.photos);
+      //  photos.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, getphotos(mParam1)));
+
         photos.setAdapter(new PhotoImageAdapter(r.getContext(),getphotos(mParam1))); // uses the view to get the context instead of getActivity().
 
         return r;
