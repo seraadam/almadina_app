@@ -67,7 +67,12 @@ public class Explore extends Fragment {
                 "Know more about Almadinah Museum",
                 "Find out where to eat in Almadinah!",
                 "Find and visit malls in Almadinah"};
-         OPTIONS_PICTURES = new int[]{R.drawable.pois, R.drawable.tripplanner,R.drawable.madakheel, R.drawable.multimedia,R.drawable.shopping,R.drawable.restaurant};
+         OPTIONS_PICTURES = new int[]{R.drawable.pois,
+                 R.drawable.tripplanner,
+                 R.drawable.madakheel,
+                 R.drawable.multimedia,
+                 R.drawable.restaurant,
+                    R.drawable.shopping};
          value = new String[]{"Islamic","Historical","Event","Museum"
                  ,"Restaurant","Shopping"};
 
