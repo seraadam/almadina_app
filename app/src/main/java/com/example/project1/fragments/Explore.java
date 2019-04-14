@@ -55,9 +55,18 @@ public class Explore extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        OPTION_NAMES = new String[]{"Islamic Landmarks", "Historical Places","Events","Museum", "Restaurant","shopping mall"};
-        OPTION_DESCRIPTION =new String[] {"Visit and know more about Islamic places in Almadinah!", "Discover more historical places!", "Visit and know more about Islamic places in Almadinah!",
-                "Visit and know more about Islamic places in Almadinah!","Visit and know more about Islamic places in Almadinah!","Find out where to eat!"};
+        OPTION_NAMES = new String[]{"Islamic Landmarks",
+                "Historical Places",
+                "Events",
+                "Museum",
+                "Restaurant",
+                "shopping mall"};
+        OPTION_DESCRIPTION =new String[] {"Visit and know more about Islamic places in Almadinah!",
+                "Discover more historical places!",
+                "Find out what events Almadinah is hosting!",
+                "Know more about Almadinah Museum",
+                "Find out where to eat in Almadinah!",
+                "Find and visit malls in Almadinah"};
          OPTIONS_PICTURES = new int[]{R.drawable.pois, R.drawable.tripplanner,R.drawable.madakheel, R.drawable.multimedia,R.drawable.shopping,R.drawable.restaurant};
          value = new String[]{"Islamic","Historical","Event","Museum"
                  ,"Restaurant","Shopping"};
