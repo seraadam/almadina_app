@@ -30,6 +30,7 @@ public class PlannerAdapter extends ArrayAdapter<Places> {
     private List<Places> gplaces;
     private Activity mContext;
     private AdapterListener mListener;
+    private ViewHolder viewHolder;
 
     public static class ViewHolder  {
         public TextView tvw1;
@@ -56,6 +57,8 @@ public class PlannerAdapter extends ArrayAdapter<Places> {
         this.mContext = context;
         this.gplaces= gplaces;
     }
+
+
     // define listener
     public interface AdapterListener {
         void onClick(int id);
@@ -72,7 +75,7 @@ public class PlannerAdapter extends ArrayAdapter<Places> {
 
 
         assert convertView != null;
-        final ViewHolder viewHolder;
+
 
         if (convertView == null) {
 
@@ -118,6 +121,18 @@ public class PlannerAdapter extends ArrayAdapter<Places> {
 
     public int getCount () {
         return gplaces.size();
+    }
+
+    public void updateReceiptsList(List<Places> newlist) {
+        gplaces.clear();
+        gplaces.addAll(newlist);
+        if(viewHolder!=null){
+        viewHolder.serve.setVisibility(View.GONE);
+        viewHolder.reserved.setVisibility(View.VISIBLE);
+            Log.e("image","changed");
+        }
+
+        this.notifyDataSetChanged();
     }
 
 

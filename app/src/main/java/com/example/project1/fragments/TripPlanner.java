@@ -106,6 +106,7 @@ public class TripPlanner extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+
     }
 
     @Override
@@ -160,6 +161,7 @@ btnSubmit.setOnClickListener(new View.OnClickListener() {
     public void onClick(View v) {
         String text = spinner1.getSelectedItem().toString();
 
+
         Log.e("responce spinner", text);
 
         Log.e("Response: " ,pyear+pmonth+ pday);
@@ -175,6 +177,7 @@ btnSubmit.setOnClickListener(new View.OnClickListener() {
                     public void onResponse(JSONObject response) {
                         long totalRequestTime = System.currentTimeMillis() - mRequestStartTime;
                         places.clear();
+
                         Log.e("time: " , totalRequestTime+"responce");
                         try {
                             JSONArray obj = response.getJSONArray("records");
