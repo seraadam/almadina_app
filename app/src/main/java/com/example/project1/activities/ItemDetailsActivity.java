@@ -78,8 +78,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
                                         response.getInt("PID") ,
                                         response.getString("Category"));
 
-                            if(response.getString("image_name") .equals(null)){
-                                itemImage.setImageResource(R.drawable.ppp);
+
+                            if(response.getString("image_name") .equals(null)|| response.getString("image_name").isEmpty()){
+
+                                Picasso.with(getApplicationContext()).load(R.drawable.ppp).into(itemImage);
                             }
                             else{
                                 // loading movie cover using Glide library

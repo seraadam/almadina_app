@@ -90,8 +90,10 @@ public class PlannerAdapter extends ArrayAdapter<Places> {
         final Places pcat = gplaces.get(position);
 
        
-        if(pcat.getImage_name().equals(null)){
-            viewHolder.ivw.setImageResource(R.drawable.ppp);
+        if(pcat.getImage_name().equals(null)||pcat.getImage_name().isEmpty()){
+
+            Picasso.with(mContext).load(R.drawable.ppp).into(viewHolder.ivw);
+
         }
         else{
             // loading movie cover using Glide library
