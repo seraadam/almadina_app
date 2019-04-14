@@ -30,6 +30,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +53,8 @@ public class ImagesFragment extends Fragment {
     private GridView photos;
     private OnFragmentInteractionListener mListener;
     private long mRequestStartTime;
+    private List<String> u;
+    private PhotoImageAdapter oo;
     public ImagesFragment() {
         // Required empty public constructor
     }
@@ -92,93 +96,95 @@ public class ImagesFragment extends Fragment {
 
         View r = inflater.inflate(R.layout.fragment_images, container, false);
         photos =  r.findViewById(R.id.photos);
+        u =  new ArrayList<>();
       //  photos.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, getphotos(mParam1)));
-
-        photos.setAdapter(new PhotoImageAdapter(r.getContext(),getphotos(mParam1))); // uses the view to get the context instead of getActivity().
+         oo = new PhotoImageAdapter(r.getContext(),getphotos(mParam1));
+        photos.setAdapter(oo); // uses the view to get the context instead of getActivity().
 
         return r;
     }
 
-    public int[] getphotos(int id){
-      int[] u =  {
-                 R.drawable.mmm ,  R.drawable.ooo ,
-                 R.drawable.ppp ,  R.drawable.ppp ,
-                R.drawable.iiii ,  R.drawable.ooo ,
-               R.drawable.ppp ,  R.drawable.iiii ,
-               R.drawable.mmm ,  R.drawable.ooo ,
-               R.drawable.mmm ,  R.drawable.ppp ,
-               R.drawable.ppp ,  R.drawable.iiii ,
-               R.drawable.iiii ,  R.drawable.mmm ,
-                R.drawable.ppp ,  R.drawable.ooo ,
-                R.drawable.ppp ,  R.drawable.mmm ,
-               R.drawable.ppp ,  R.drawable.ppp
-        };
+    public List<String> getphotos(int id){
 
-//        String url = "http://nomow.tech/tiba/api/place/read_category.php?category="+ id;
-//        mRequestStartTime = System.currentTimeMillis();
-//        Log.e("Response: " , url);
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-//                (Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-//
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        long totalRequestTime = System.currentTimeMillis() - mRequestStartTime;
-//                        Log.e("time: " , totalRequestTime+"responce");
-//                        try {
-//                            JSONArray obj = response.getJSONArray("category");
-//                            for (int i = 0; i < obj.length(); i++) {
-//
-//                                String jsonObject = (String) obj.get(i);
-//
-//
-//                                places.add(p);
-//                            }
-//
-//                            exploreAdapter.notifyDataSetChanged();
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//
-//                        }
-//
-//                    }
-//                }, new Response.ErrorListener() {
-//
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        // As of f605da3 the following should work
-//                        NetworkResponse response = error.networkResponse;
-//                        long totalRequestTime = System.currentTimeMillis() - mRequestStartTime;
-//                        Log.e("time: " , response+"response");
-//
-//                        if (error instanceof ServerError && response != null) {
-//                            try {
-//                                String res = new String(response.data,
-//                                        HttpHeaderParser.parseCharset(response.headers, "utf-8"));
-//                                // Now you can use any deserializer to make sense of data
-//                                JSONObject obj = new JSONObject(res);
-//                                Log.i("obj : ", obj.toString());
-//                            } catch (UnsupportedEncodingException e1) {
-//                                // Couldn't properly decode data to string
-//                                e1.printStackTrace();
-//                            } catch (JSONException e2) {
-//                                // returned data is not JSONObject?
-//                                e2.printStackTrace();
-//                            }
-//                        }
-//
-//                    }
-//                });
-//
-//// Access the RequestQueue through your singleton class.
-//        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
-//                5000,
-//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-//
-//        RequestQueue rq = Volley.newRequestQueue(getApplicationContext());
-//        rq.add(jsonObjectRequest);
+//             {
+//                 R.drawable.mmm ,  R.drawable.ooo ,
+//                 R.drawable.ppp ,  R.drawable.ppp ,
+//                 R.drawable.iiii ,  R.drawable.ooo ,
+//                 R.drawable.ppp ,  R.drawable.iiii ,
+//                 R.drawable.mmm ,  R.drawable.ooo ,
+//                 R.drawable.mmm ,  R.drawable.ppp ,
+//                 R.drawable.ppp ,  R.drawable.iiii ,
+//                 R.drawable.iiii ,  R.drawable.mmm ,
+//                 R.drawable.ppp ,  R.drawable.ooo ,
+//                 R.drawable.ppp ,  R.drawable.mmm ,
+//                 R.drawable.ppp ,  R.drawable.ppp
+//        };
 
-        Log.e("data",u[3]+"");
+        String url = "  http://nomow.tech/tiba/api/multimedia/read_category.php?id="+ id;
+        mRequestStartTime = System.currentTimeMillis();
+        Log.e("Response: " , url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        long totalRequestTime = System.currentTimeMillis() - mRequestStartTime;
+                        Log.e("time: " , totalRequestTime+"responce");
+                        try {
+                            JSONArray obj = response.getJSONArray("category");
+                            for (int i = 0; i < obj.length(); i++) {
+
+                                JSONObject jsonObject = obj.getJSONObject(i);
+                                String ilink = jsonObject.getString("image");
+                                u.add(ilink);
+                                Log.e("time: " , ilink);
+                            }
+
+                            oo.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // As of f605da3 the following should work
+                        NetworkResponse response = error.networkResponse;
+                        long totalRequestTime = System.currentTimeMillis() - mRequestStartTime;
+                        Log.e("time: " , response+"response");
+
+                        if (error instanceof ServerError && response != null) {
+                            try {
+                                String res = new String(response.data,
+                                        HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                // Now you can use any deserializer to make sense of data
+                                JSONObject obj = new JSONObject(res);
+                                Log.i("obj : ", obj.toString());
+                            } catch (UnsupportedEncodingException e1) {
+                                // Couldn't properly decode data to string
+                                e1.printStackTrace();
+                            } catch (JSONException e2) {
+                                // returned data is not JSONObject?
+                                e2.printStackTrace();
+                            }
+                        }
+
+                    }
+                });
+
+// Access the RequestQueue through your singleton class.
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueue rq = Volley.newRequestQueue(getContext());
+        rq.add(jsonObjectRequest);
+
+
         return u;
 
     }

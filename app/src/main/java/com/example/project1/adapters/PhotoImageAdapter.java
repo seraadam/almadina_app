@@ -10,18 +10,21 @@ import android.widget.ImageView;
 import com.example.project1.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 public class PhotoImageAdapter extends BaseAdapter {
     private Context mContext;
-    private int[] mThumbIds;
+    private List<String> mThumbIds;
 
 
-    public PhotoImageAdapter(Context c ,int[] mThumbIds) {
+    public PhotoImageAdapter(Context c ,List<String> mThumbIds) {
         this.mContext = c;
         this.mThumbIds = mThumbIds;
     }
 
+    @Override
     public int getCount() {
-        return mThumbIds.length;
+        return mThumbIds.size();
     }
 
     public Object getItem(int position) {
@@ -44,16 +47,18 @@ public class PhotoImageAdapter extends BaseAdapter {
         }
 
 
-        if(mThumbIds[position]==0){
+        if(mThumbIds.get(position).isEmpty()|| mThumbIds.get(position).equals(null)){
 
-           // Picasso.with(mContext).load(R.drawable.ppp).into(imageView);
-            imageView.setImageResource(R.drawable.ppp);
+            Picasso.with(mContext).load(R.drawable.ppp).into(imageView);
+            Picasso.with(mContext).setLoggingEnabled(true);
+            //imageView.setImageResource(R.drawable.ppp);
 
         }
         else{
-            Log.e("img",mThumbIds[position]+"");
-            imageView.setImageResource(mThumbIds[position]);
-            //Picasso.with(mContext).load(mThumbIds[position]).into(imageView);
+            Log.e("img",mThumbIds.get(position)+"");
+          //  imageView.setImageResource(mThumbIds[position]);
+            Picasso.with(mContext).load(mThumbIds.get(position)).into(imageView);
+            Picasso.with(mContext).setLoggingEnabled(true);
 
         }
 
