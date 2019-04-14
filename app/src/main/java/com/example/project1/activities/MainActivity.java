@@ -108,4 +108,5 @@ public class MainActivity extends AppCompatActivity implements TripPlanner.OnFra
     public void onFragmentInteraction(Uri uri) {
 
     }
+
 }
