@@ -74,8 +74,11 @@ public class Setting extends Fragment {
             @Override
             public void onClick(View v) {
 
+                //Creating a shared preference
+
                 SharedPreferences.Editor editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
-                editor.clear();
+                //Adding values to editor
+                editor.putBoolean(IS_LOGGED_USER, false);
                 editor.apply();
 
                 Intent register = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
