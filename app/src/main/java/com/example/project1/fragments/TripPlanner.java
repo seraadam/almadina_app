@@ -70,11 +70,11 @@ public class TripPlanner extends Fragment {
     public String pmonth=null;
     public String pyear=null;
     public  String selectedDate;
-
+    public   String textcategory;
     private OnFragmentInteractionListener mListener;
     private CalendarView customCalendar;
     private Spinner spinner1;
-    private Spinner spinner2;
+//    private Spinner spinner2;
     private Button btnSubmit,start ,end;
 
 
@@ -118,7 +118,7 @@ public class TripPlanner extends Fragment {
 
        // customCalendar = (CalendarView) v.findViewById(R.id.calendarView);
         spinner1 = (Spinner) v.findViewById(R.id.spinner1);
-        spinner2 = (Spinner) v.findViewById(R.id.spinner2);
+//        spinner2 = (Spinner) v.findViewById(R.id.spinner2);
         btnSubmit= (Button) v.findViewById(R.id.btnSubmit);
         start= (Button) v.findViewById(R.id.start);
         end= (Button) v.findViewById(R.id.end);
@@ -154,15 +154,10 @@ public class TripPlanner extends Fragment {
 
 btnSubmit.setOnClickListener(new View.OnClickListener() {
 
-
-
-
     @Override
     public void onClick(View v) {
-        String text = spinner1.getSelectedItem().toString();
-
-
-        Log.e("responce spinner", text);
+         textcategory = spinner1.getSelectedItem().toString();
+        Log.e("responce spinner", textcategory);
 
         Log.e("Response: " ,pyear+pmonth+ pday);
         String url = "http://nomow.tech/tiba/api/place/read_dates.php?pdate="+ selectedDate;
@@ -183,6 +178,8 @@ btnSubmit.setOnClickListener(new View.OnClickListener() {
                             JSONArray obj = response.getJSONArray("records");
                             for (int i = 0; i < obj.length(); i++) {
                                 JSONObject jsonObject = obj.getJSONObject(i);
+
+                                if(jsonObject.getString("Category").equals(textcategory )){
                                 Places p = new Places( jsonObject.getString("Title"),
                                         jsonObject.getString("image_name") ,
                                         jsonObject.getString("lat"),
@@ -192,10 +189,9 @@ btnSubmit.setOnClickListener(new View.OnClickListener() {
                                         jsonObject.getString("Description"),
                                         jsonObject.getInt("PID") ,
                                         jsonObject.getString("Category"));
-                                Log.e("Response: " , p.getCategory());
-
-
+                                Log.e("Response: " , p.getCategory()+ i );
                                 places.add(p);
+                                }
                             }
 
                             plannerAdapter.notifyDataSetChanged();
@@ -275,7 +271,7 @@ btnSubmit.setOnClickListener(new View.OnClickListener() {
                 final String vid = "7";
                 final String pid = id +"";
 
-                final String date= pyear+"-"+ pmonth +"-"+pday;
+                final String date=selectedDate;
 
                 Log.e("Response: " , date);
                 Log.e("Response: " , pid);
