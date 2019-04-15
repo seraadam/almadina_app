@@ -1,6 +1,8 @@
 package com.example.project1.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -35,11 +37,25 @@ public class ItemDetailsActivity extends AppCompatActivity {
     final ArrayList<ItemDetails> mItems = new ArrayList<>();
     ImageView itemImage;
     TextView itemTitle,itemLocation,itemHighlight;
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
+    public static final String IS_LOGGED_USER = "IsLogged";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_details);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
+        Boolean setting = sharedPreferences.getBoolean(IS_LOGGED_USER, false);
+
+        if(!setting){
+            Log.e("existed",setting+"");
+            Intent loged = new Intent(getApplicationContext(), LoginActivity.class);
+            loged.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(loged);
+
+        }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);

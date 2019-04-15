@@ -75,6 +75,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
+        Boolean setting = sharedPreferences.getBoolean(IS_LOGGED_USER, false);
+
+        if(setting){
+            Log.e("existed",setting+"");
+            Intent loged = new Intent(getApplicationContext(), MainActivity.class);
+            loged.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(loged);
+
+        }
+
         editTextUsername = (EditText) findViewById(R.id.username_signup);
         editTextEmail = (EditText) findViewById(R.id.email_signup);
         editTextPassword = (EditText) findViewById(R.id.password_signup);
@@ -118,7 +129,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                   
+
 
                                             //Creating a shared preference
                                             SharedPreferences sharedPreferences = RegisterActivity.this.getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);

@@ -60,9 +60,9 @@ public class Home extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mList.add(new Item(R.drawable.pois,"Interesting places",R.drawable.explore_icon));
-        mList.add(new Item(R.drawable.tripplanner,"Plan your trip",R.drawable.plan_icon));
-        mList.add(new Item(R.drawable.multimedia,"Discover more",R.drawable.multimedia_icon));
+        mList.add(new Item(R.drawable.pois,"Points of Interest",R.drawable.explore_icon));
+        mList.add(new Item(R.drawable.tripplanner,"Trip planner",R.drawable.plan_icon));
+        mList.add(new Item(R.drawable.multimedia,"Multimedia",R.drawable.multimedia_icon));
         mRecyclerView = view.findViewById(R.id.rv_list);
         mHomeAdapter = new HomeAdapter(getActivity(), mList, getFragmentManager());
 

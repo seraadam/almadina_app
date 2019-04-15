@@ -1,6 +1,8 @@
 package com.example.project1.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +43,8 @@ public class ExploreDetailsActivity extends AppCompatActivity {
     ExploreDetailsAdapter exploreAdapter;
 
     long mRequestStartTime;
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
+    public static final String IS_LOGGED_USER = "IsLogged";
 
     private static final String EXPLORE_CATEGORY_KEY = "explore_category_key";
 
@@ -52,6 +56,17 @@ public class ExploreDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String c = intent.getStringExtra(EXPLORE_CATEGORY_KEY);
         Log.e("intent: " , c);
+        SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
+        Boolean setting = sharedPreferences.getBoolean(IS_LOGGED_USER, false);
+
+
+        if(!setting){
+            Log.e("existed",setting+"");
+            Intent loged = new Intent(getApplicationContext(), LoginActivity.class);
+            loged.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(loged);
+
+        }
 
 //        id = new int[]{1, 2, 3};
 //        title = new String[]{"Prophets Mosque", "Uhud Mountain", "Taiba Restaurant"};

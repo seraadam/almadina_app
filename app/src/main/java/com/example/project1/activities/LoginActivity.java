@@ -34,13 +34,15 @@ package com.example.project1.activities;
 
   import java.io.UnsupportedEncodingException;
 
+
 public class LoginActivity extends AppCompatActivity {
 
     Button loginButton,registerButton;
     ProgressBar loginProgress;
     TextView email, password;
 
-
+    public static final String IS_LOGGED_USER = "IsLogged";
+    public static final String MY_PREFS_EMAIL = "MyPrefsId";
     public static final String MY_PREFS_NAME = "MyPrefsFile";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +56,11 @@ public class LoginActivity extends AppCompatActivity {
         loginProgress.setVisibility(View.INVISIBLE);
 
         SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
-        String setting = sharedPreferences.getString("email", null);
-        if(setting != null){
-            Log.e("existed",setting);
+        Boolean setting = sharedPreferences.getBoolean(IS_LOGGED_USER, false);
+
+
+        if(setting){
+            Log.e("existed",setting+"");
             Intent loged = new Intent(getApplicationContext(), MainActivity.class);
             loged.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getApplicationContext().startActivity(loged);
@@ -112,9 +116,18 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
 
-                SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
-                editor.putString("email", email);
-                editor.apply();
+
+                //Creating a shared preference
+                SharedPreferences sharedPreferences = LoginActivity.this.getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
+
+                //Creating editor to store values to shared preferences
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                //Adding values to editor
+                editor.putBoolean(IS_LOGGED_USER, true);
+                editor.putString(MY_PREFS_EMAIL, email);
+                //Saving values to editor
+                editor.commit();
 
                 Intent register = new Intent(getApplicationContext(), MainActivity.class);
                 register.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
