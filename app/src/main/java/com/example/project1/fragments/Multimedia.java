@@ -71,7 +71,7 @@ public class Multimedia extends Fragment {
                 data.putInt("param1",1);
                 Fragment fragment = new ImagesFragment();
                 fragment.setArguments(data);
-                Log.e("cardtop","here1");
+                Log.e("cardtop","almadina meuseum 1");
                 android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.flcontent,fragment);
                 ft.commit();
@@ -86,7 +86,7 @@ public class Multimedia extends Fragment {
                 data.putInt("param1",2);
                 Fragment fragment = new ImagesFragment();
                 fragment.setArguments(data);
-                Log.e("cardright","here2");
+                Log.e("cardright","islamic2");
                 android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.flcontent,fragment);
                 ft.commit();
@@ -101,7 +101,7 @@ public class Multimedia extends Fragment {
                 data.putInt("param1",3);
                 Fragment fragment = new ImagesFragment();
                 fragment.setArguments(data);
-                Log.e("cardLeft","here3");
+                Log.e("cardLeft","dress3");
                 android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
 
                 ft.replace(R.id.flcontent,fragment);
@@ -117,7 +117,7 @@ public class Multimedia extends Fragment {
                 data.putInt("param1",4);
                 Fragment fragment = new ImagesFragment();
                 fragment.setArguments(data);
-                Log.e("cardLeft2","here4");
+                Log.e("cardLeft2","food4");
                 android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.flcontent,fragment);
                 ft.commit();

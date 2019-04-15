@@ -4,6 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +25,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.project1.R;
+import com.example.project1.activities.MainActivity;
 import com.example.project1.adapters.PhotoImageAdapter;
 import com.example.project1.models.Places;
 
@@ -95,6 +99,8 @@ public class ImagesFragment extends Fragment {
 
 
         View r = inflater.inflate(R.layout.fragment_images, container, false);
+
+
         photos =  r.findViewById(R.id.photos);
         u =  new ArrayList<>();
       //  photos.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, getphotos(mParam1)));

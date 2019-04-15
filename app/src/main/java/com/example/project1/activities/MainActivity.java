@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements TripPlanner.OnFra
         ImagesFragment.OnFragmentInteractionListener{
     private DrawerLayout mDrawerlayout;
     private ActionBarDrawerToggle mToggle;
+    private NavigationView nvDrawer;
 
 
     @Override
@@ -35,7 +36,8 @@ public class MainActivity extends AppCompatActivity implements TripPlanner.OnFra
         mDrawerlayout =  findViewById(R.id.drawer);
         mToggle = new ActionBarDrawerToggle(this, mDrawerlayout, R.string.open, R.string.close);
         mDrawerlayout.addDrawerListener(mToggle);
-        NavigationView nvDrawer = findViewById(R.id.nv);
+
+         nvDrawer = findViewById(R.id.nv);
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setupDrawerContent(nvDrawer);
