@@ -78,7 +78,7 @@ public class Setting extends Fragment {
 
                 SharedPreferences.Editor editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
                 //Adding values to editor
-                editor.putBoolean(IS_LOGGED_USER, false);
+                editor.clear();
                 editor.apply();
 
                 Intent register = new Intent(getActivity().getApplicationContext(), LoginActivity.class);

@@ -26,6 +26,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -40,6 +41,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.project1.activities.LoginActivity.MY_PREFS_ID;
+
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String KEY_USERNAME = "Username";
@@ -47,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public static final String key_nationality = "NAtionality";
     public static final String KEY_EMAIL = "Email";
     public static final String KEY_ID = "id";
+    long mRequestStartTime;
 
     ConnectivityManager isConnectionExist ;
     Boolean connected;
@@ -68,6 +72,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public static final String MY_PREFS_NAME = "MyPrefsFile";
     public static final String IS_LOGGED_USER = "IsLogged";
     public static final String MY_PREFS_EMAIL = "MyPrefsId";
+    private String vid;
 
 
     @Override
@@ -130,24 +135,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 @Override
                                 public void onResponse(String response) {
 
-
-                                            //Creating a shared preference
-                                            SharedPreferences sharedPreferences = RegisterActivity.this.getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
-
-                                            //Creating editor to store values to shared preferences
-                                            SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                                            //Adding values to editor
-                                            editor.putBoolean(IS_LOGGED_USER, true);
-                                            editor.putString(MY_PREFS_EMAIL, email);
-                                            //Saving values to editor
-                                            editor.commit();
-
-                                            Toast.makeText(RegisterActivity.this, "تم تسجيل بياناتك بنجاح", Toast.LENGTH_LONG).show();
-                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                            startActivity(intent);
-                                            finish();
-
+                                    getUID(email);
 
 
                                 }
@@ -220,6 +208,60 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
 
         }
+    }
+
+    private void getUID(final String email) {
+
+        mRequestStartTime = System.currentTimeMillis();
+
+        vid = null;
+
+        String url = "http://nomow.tech/tiba/api/visitor/read_one.php?id="+email;
+        Log.e("Response: ", url);
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, url,null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.e("Response: ", response.toString());
+                try {
+                    //JSONObject jsonObject = new JSONObject(response);
+                    Log.e("Response: ", response.getString("VID"));
+                    vid= response.getString("VID");
+                    //Creating a shared preference
+                    SharedPreferences sharedPreferences = RegisterActivity.this.getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
+
+                    //Creating editor to store values to shared preferences
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    //Adding values to editor
+                    editor.putBoolean(IS_LOGGED_USER, true);
+                    editor.putString(MY_PREFS_EMAIL, email);
+                    editor.putString(MY_PREFS_ID,vid );
+                    //Saving values to editor
+                    editor.commit();
+
+                    Toast.makeText(RegisterActivity.this, "تم تسجيل بياناتك بنجاح", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+// Access the RequestQueue through your singleton class.
+
+        RequestQueue rq = Volley.newRequestQueue(getApplicationContext());
+        rq.add(stringRequest);
+
+
     }
 
     public int CheckNameIsLetter(String x) {

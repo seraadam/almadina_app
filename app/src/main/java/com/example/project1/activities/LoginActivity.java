@@ -27,12 +27,15 @@ package com.example.project1.activities;
   import com.android.volley.toolbox.Volley;
   import com.example.project1.R;
   import com.example.project1.models.Places;
+  import com.google.gson.JsonObject;
 
   import org.json.JSONArray;
   import org.json.JSONException;
   import org.json.JSONObject;
 
   import java.io.UnsupportedEncodingException;
+
+  import static com.android.volley.DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -43,7 +46,10 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final String IS_LOGGED_USER = "IsLogged";
     public static final String MY_PREFS_EMAIL = "MyPrefsId";
+    public static final String MY_PREFS_ID = "ID";
     public static final String MY_PREFS_NAME = "MyPrefsFile";
+    long mRequestStartTime;
+    public  String vid, temp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.login_mail);
         password =findViewById(R.id.login_password);
         loginProgress.setVisibility(View.INVISIBLE);
-
+        temp= null;
         SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
         Boolean setting = sharedPreferences.getBoolean(IS_LOGGED_USER, false);
 
@@ -67,12 +73,21 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
+
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               
 
-                login( email.getText().toString(),password.getText().toString());
+                if(email.getText().toString().isEmpty()||email.getText().toString().equals(null)){
+                    Toast.makeText(LoginActivity.this,"enter email please",Toast.LENGTH_LONG).show();
+                }else{
+                    temp = getUID(email.getText().toString());
+
+
+                }
+
+
 
 
             }
@@ -94,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void login(final String email, String password){
+    public void login(final String email, String password, final String uid){
         long mRequestStartTime = System.currentTimeMillis();
 
         final String URL = "http://nomow.tech/tiba/api/login.php";
@@ -117,6 +132,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(String response) {
 
 
+
                 //Creating a shared preference
                 SharedPreferences sharedPreferences = LoginActivity.this.getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
 
@@ -126,6 +142,8 @@ public class LoginActivity extends AppCompatActivity {
                 //Adding values to editor
                 editor.putBoolean(IS_LOGGED_USER, true);
                 editor.putString(MY_PREFS_EMAIL, email);
+                editor.putString(MY_PREFS_ID,uid );
+                Log.e("Response: ", uid);
                 //Saving values to editor
                 editor.commit();
 
@@ -173,12 +191,6 @@ public class LoginActivity extends AppCompatActivity {
         };
 
 
-// Access the RequestQueue through your singleton class.
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                5000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
         RequestQueue rr = Volley.newRequestQueue(this);
         rr.add(stringRequest);
 
@@ -189,6 +201,45 @@ public class LoginActivity extends AppCompatActivity {
       //  Toast.makeText(MainActivity.this,"There is no back action",Toast.LENGTH_LONG).show();
         return;
     }
+
+    private String getUID(final String email) {
+
+        mRequestStartTime = System.currentTimeMillis();
+
+         vid = null;
+
+            String url = "http://nomow.tech/tiba/api/visitor/read_one.php?id="+email;
+            Log.e("Response: ", url);
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, url,null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.e("Response: ", response.toString());
+                try {
+                    //JSONObject jsonObject = new JSONObject(response);
+                    Log.e("Response: ", response.getString("VID"));
+                    vid= response.getString("VID");
+                    login(email,password.getText().toString(),vid);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+// Access the RequestQueue through your singleton class.
+
+            RequestQueue rq = Volley.newRequestQueue(getApplicationContext());
+            rq.add(stringRequest);
+
+        return vid;
+    }
+
 
 
 }

@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -84,8 +85,11 @@ public class TripPlanner extends Fragment {
     private int year, month, day;
     public static final int REQUEST_CODE = 11; // Used to identify the result
     public static final int REQUEST_CODE2 = 15; // Used to identify the result
-
-
+    public static final String IS_LOGGED_USER = "IsLogged";
+    public static final String MY_PREFS_EMAIL = "MyPrefsId";
+    public static final String MY_PREFS_ID = "ID";
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
+    public   String vid;
     long mRequestStartTime;
     public TripPlanner() {}
 
@@ -128,7 +132,7 @@ public class TripPlanner extends Fragment {
         final FragmentManager fm = ((AppCompatActivity)getActivity()).getSupportFragmentManager();
 
 
-       start.setOnClickListener(new View.OnClickListener() {
+        start.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
                // create the datePickerFragment
@@ -189,8 +193,9 @@ btnSubmit.setOnClickListener(new View.OnClickListener() {
                                         jsonObject.getString("Description"),
                                         jsonObject.getInt("PID") ,
                                         jsonObject.getString("Category"));
-                                Log.e("Response: " , p.getCategory()+ i );
+                                Log.e("Response: " , p.getCategory()+  jsonObject.getInt("PID"));
                                 places.add(p);
+                                    Log.e("Response: " , places.toString());
                                 }
                             }
 
@@ -266,14 +271,18 @@ btnSubmit.setOnClickListener(new View.OnClickListener() {
 
                // String url = "http://nomow.tech/tiba/api/plan/create.php";
 
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
+                Log.e("Response: " ,sharedPreferences.getString(MY_PREFS_ID, null) +"v");
+
+
                 mRequestStartTime = System.currentTimeMillis();
 
-                final String vid = "7";
+                final String VID =  sharedPreferences.getString(MY_PREFS_ID, null) ;
                 final String pid = id +"";
 
                 final String date=selectedDate;
 
-                Log.e("Response: " , date);
+                Log.e("Response: " , VID+"v");
                 Log.e("Response: " , pid);
 
                 final String URL = "http://nomow.tech/tiba/api/plan/create.php";
@@ -282,7 +291,7 @@ btnSubmit.setOnClickListener(new View.OnClickListener() {
 
                 JSONObject jsonBodyObj = new JSONObject();
                 try {
-                    jsonBodyObj.put("VID", vid);
+                    jsonBodyObj.put("VID", VID);
                     jsonBodyObj.put("PID", pid);
                     jsonBodyObj.put("Date", date);
                 } catch (JSONException e) {
@@ -297,6 +306,8 @@ btnSubmit.setOnClickListener(new View.OnClickListener() {
                     public void onResponse(String response) {
                         Log.i("LOG_VOLLEY", response);
                         Toast.makeText(getActivity().getApplicationContext(),"Place is added succesfully",Toast.LENGTH_LONG).show();
+                     plannerAdapter.notifyDataSetChanged();
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -348,7 +359,6 @@ btnSubmit.setOnClickListener(new View.OnClickListener() {
         
         return v;
     }
-
 
 
     @Override

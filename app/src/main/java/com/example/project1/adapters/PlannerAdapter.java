@@ -91,7 +91,7 @@ public class PlannerAdapter extends ArrayAdapter<Places> {
         }
 
         final Places pcat = gplaces.get(position);
-
+        final int xx= pcat.getId();
        
         if(pcat.getImage_name().equals(null)||pcat.getImage_name().isEmpty()){
 
@@ -110,7 +110,7 @@ public class PlannerAdapter extends ArrayAdapter<Places> {
         viewHolder.serve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onClick(pcat.getId());
+                mListener.onClick(xx);
                 Log.e("clicked",position+"");
                 viewHolder.serve.setVisibility(View.GONE);
                 viewHolder.reserved.setVisibility(View.VISIBLE);
