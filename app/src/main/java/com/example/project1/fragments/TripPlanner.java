@@ -281,12 +281,8 @@ btnSubmit.setOnClickListener(new View.OnClickListener() {
                 final String pid = id +"";
 
                 final String date=selectedDate;
-
-                Log.e("Response: " , VID+"v");
-                Log.e("Response: " , pid);
-
                 final String URL = "http://nomow.tech/tiba/api/plan/create.php";
-                Log.e("Response:",URL+"2");
+                Log.e("Response:",URL+"  2");
 
 
                 JSONObject jsonBodyObj = new JSONObject();
@@ -306,6 +302,7 @@ btnSubmit.setOnClickListener(new View.OnClickListener() {
                     public void onResponse(String response) {
                         Log.i("LOG_VOLLEY", response);
                         Toast.makeText(getActivity().getApplicationContext(),"Place is added succesfully",Toast.LENGTH_LONG).show();
+
                      plannerAdapter.notifyDataSetChanged();
 
                     }

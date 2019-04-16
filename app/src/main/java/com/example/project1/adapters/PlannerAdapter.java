@@ -59,6 +59,12 @@ public class PlannerAdapter extends ArrayAdapter<Places> {
     }
 
 
+    @Override
+    public Places getItem(int position) {
+        return super.getItem(position);
+
+    }
+
     // define listener
     public interface AdapterListener {
         void onClick(int id);
@@ -112,7 +118,7 @@ public class PlannerAdapter extends ArrayAdapter<Places> {
             public void onClick(View view) {
                 mListener.onClick(xx);
                 Log.e("clicked",position+"");
-                viewHolder.serve.setVisibility(View.GONE);
+                view.setVisibility(View.GONE);
                 viewHolder.reserved.setVisibility(View.VISIBLE);
             }
         });
